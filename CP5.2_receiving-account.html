@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>收款帳戶</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>帳務管理>收款帳戶
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">收款帳戶
+                  </h2>
+                </div>
+                <fieldset>
+                  <div class="b-text-field d-block" :class="validation.bankCode">
+                    <label>銀行代碼<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <v-select class="b-select" :options="bankList" v-model="formData.bankcode" label="code" placeholder="請填寫銀行代碼" :clearable="false">
+                            <template v-slot:option="bankList"><span>{{ bankList.code }} {{ bankList.name }}</span></template>
+                            <template #selected-option="{ code, name }">
+                              <p>{{ formData.bankcode.code }} {{ formData.bankcode.name }}</p>
+                            </template>
+                          </v-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="validation.bank">
+                    <label>分行<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input" type="text" v-model="formData.bank" :disabled="disabled" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="validation.accountName">
+                    <label>戶名<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input" type="text" v-model="formData.accountName" :disabled="disabled" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="validation.account">
+                    <label>帳戶<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input" type="number" v-model="formData.account" :disabled="disabled" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block pt-xs">
+                    <label>存摺照片<span>*</span></label>
+                    <div class="b-field-group"> 
+                      <div class="b-field-row mb-none">
+                        <label class="b-btn-primary outline ml-none" for="previewImg" data-size="md">選擇檔案
+                          <input type="file" id="previewImg" accept=".png, .jpg, .jpeg" @change="backpackImgPreview">
+                        </label>
+                        <p class="mx-sm mt-xxs" v-if="previewImg.name">{{ previewImg.name }} ({{ previewImg.size }}KB)</p><span class="b-caption d-block pt-xs">請上傳有帳戶號碼的存摺封面</span>
+                      </div>
+                      <div class="b-field-row mb-none">
+                        <template v-if="previewImg.value"><img :src="previewImg.value" style="max-width:480px"></template>
+                        <template v-if="previewImg.alert">
+                          <div class="alert alert-danger">{{ previewImg.name }} {{ previewImg.alert }}</div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-primary" data-size="lg" type="button" @click="saveForm">送出 </button>
+                  <p class="w-100 t-c b-caption">※欲修改收款帳戶資訊請洽客服單位申請</p>
+                </div>
+              </form>
+              <div class="modal fade" id="confirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="warning"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">帳戶確認</h3>
+                      <p class="text-A">收款帳戶資料一經送出則不可編輯，是否確認送出資料？</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" @click="confirmChange">確認</button>
+                      <button class="b-btn-default w-100 text no-underline" data-size="md" type="button" data-dismiss="modal">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="./js/bankcode.js"></script>
+    <script>
+      currentPage('收款帳戶')
+      //- let code = JSON.parse(bankCodes)
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  formData: {
+                      bankCode: '700',
+                      account: '',
+                      bank:'',
+                      accountName: '',
+                  },
+                  errorClass: 'validate-error',
+                  bankList: bankCodes,
+                  disabled: false,
+                  validation: {
+                      bankCode:'',
+                      account: '',
+                      bank:'',
+                      accountName: '',
+                  },
+                  previewImg:{
+                      value: '',
+                      name: '',
+                      alert: '',
+                      validation: true,
+                  },
+              }
+          },
+          watch: {
+              formData: {
+                  handler: function (){
+                      this.formData.bankCode? this.validation.account ='': ''
+                      this.formData.account? this.validation.account = '': ''
+                      this.formData.bank? this.validation.bank = '': '' 
+                      this.formData.accountName? this.validation.accountName = '': ''
+                  },
+                  deep: true
+              },
+              "previewImg.value": function () {
+                  if(this.previewImg.value) {
+                      this.previewImg.validation = ''
+                  } 
+              },
+          },
+          methods: {
+              backpackImgPreview: function(e) {
+                  const file = e.target.files[0];
+                  this.previewImg.name = file.name;
+                  if( file.size / 1024 < 1024) {
+                      this.previewImg.value = URL.createObjectURL(file);
+                      this.previewImg.size = (file.size / 1024).toFixed(2);
+                      this.previewImg.alert = ''
+                  } else {
+                      this.previewImg.value = '';
+                      this.previewImg.size = '';
+                      this.previewImg.alert = '檔案尺寸過大'
+                  }
+              },
+              confirmChange: function (){
+                  this.disabled = true
+                  $('#confirm').modal('hide')
+              },
+              validationEmpty: function(cb){
+                  // 要填寫
+                  this.formData.bankCode? '':this.validation.bankCode = this.errorClass 
+                  this.formData.account? '':this.validation.account = this.errorClass 
+                  this.formData.bank? '':this.validation.bank = this.errorClass 
+                  this.formData.accountName? '':this.validation.accountName = this.errorClass 
+                  
+                  console.log('???')
+      
+                  window.setTimeout(function(){
+                      if( typeof cb === 'function' ){
+                          cb();
+                      }
+                  }, 500)
+              },
+              showAlert: function(){
+                  if(document.querySelectorAll('.validate-error').length>0) {
+                      
+                      // 捲動到錯誤的欄位位置 
+                      let top = document.querySelectorAll('.validate-error')[0].offsetTop
+                      window.scrollTo({
+                          top: top,
+                          left: 0,
+                          behavior: 'smooth'
+                      })
+                  } else {
+                      $('#confirm').modal('show')
+                  }
+              },
+              saveForm: function (){
+                  this.validationEmpty(this.showAlert)
+              }
+          },
+      })
+    </script>
+  </body>
+</html>

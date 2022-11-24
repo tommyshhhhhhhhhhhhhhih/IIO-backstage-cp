@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>資產審核</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"><span class="breadcrum">廠商後台>資產註冊管理>資產審核</span>
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">資產審核
+                  </h2>
+                </div>
+                <div class="status"> 
+                  <div class="step previous"><span class="step-label">1</span><span class="step-name">建立資產資訊</span></div>
+                  <div class="step"><span class="step-label">2</span><span class="step-name">內部審核</span></div>
+                  <div class="step next"><span class="step-label">3</span><span class="step-name">平台審核</span></div>
+                  <div class="step next"><span class="step-label">4</span><span class="step-name">審核結果</span></div>
+                </div>
+                <hr>
+                <fieldset>
+                  <div class="b-text-field"><span class="alert alert-warning">確認以下資訊後請逐一勾選確認</span></div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">資產類別
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check8" v-model="checkboxs[7].value">
+                        <label class="pr-xs" for="check8">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <p class="readonly">道具-小丸子</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">資產名稱
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check1" v-model="checkboxs[0].value">
+                        <label class="pr-xs" for="check1">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <p class="readonly">{{ assetName.value }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">資產描述
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check2" v-model="checkboxs[1].value">
+                        <label class="pr-xs" for="check2">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group"> 
+                      <div class="b-field-row">
+                        <p class="readonly">{{ assetDesc.value }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block pt-xs">
+                    <label class="d-flex align-items-center">bf!背包圖示<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack"><span class="material-icons">info</span></span>
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check3" v-model="checkboxs[2].value">
+                        <label class="pr-xs" for="check3">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group"> 
+                      <div class="b-field-row mb-none">
+                        <div class="b-caption mb-sm">圖檔.png 60KB</div>
+                      </div>
+                      <div class="b-field-row">
+                        <div class="img-preview mb-md" data-type="backpack"><img src="https://i.pinimg.com/564x/81/4c/46/814c46ac7917c670288b23e8fc0df6bd.jpg"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">fun市集圖檔<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewGmall"><span class="material-icons">info</span></span>
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check4" v-model="checkboxs[3].value">
+                        <label class="pr-xs" for="check4">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group">
+                      <div class="b-field-row mb-none">
+                        <div class="b-caption mb-sm">圖檔.png 60KB</div>
+                      </div>
+                      <div class="b-field-row">
+                        <div class="img-preview mb-md" data-type="marketBig"><img src="https://i.pinimg.com/564x/be/a0/c8/bea0c8cd29901fba89906d1a26d8a7be.jpg"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">資產效期
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check5" v-model="checkboxs[4].value">
+                        <label class="pr-xs" for="check5">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <p class="readonly">永久</p>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">是否限制伺服器
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check9" v-model="checkboxs[8].value">
+                        <label class="pr-xs" for="check9">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <p class="readonly">不限</p>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">資產操作規則
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check6" v-model="checkboxs[5].value">
+                        <label class="pr-xs" for="check6">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group pl-xs">
+                      <template v-for="item in assetRule">
+                        <div class="b-checkbox" v-if="item.show">
+                          <input type="checkbox" :id="item.name" v-model="item.value" disabled>
+                          <label class="pr-xs" :for="item.name">{{item.label}}</label>
+                          <div class="tooltip-btn" data-toggle="tooltip" data-placement="right" :title="item.tooltip"><span class="material-icons">info</span></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">預設資產屬性<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="提供使用者更了解道具細節的屬性初始值，依欄位順序顯示內容"><span class="material-icons">info</span></span>
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check7" v-model="checkboxs[6].value">
+                        <label class="pr-xs" for="check7">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-row"> 
+                      <ul class="p-md bg-gray-1">
+                        <li v-for="item in attribute">{{ item.label }} {{ item.name }} : {{ item.value }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- 送出審核-->
+                  <div class="modal fade" id="checkedSent" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-img" data-type="success"></div>
+                      <div class="modal-content">
+                        <div class="modal-body text-center">
+                          <h3 class="modal-title">資料已送審</h3>
+                          <p class="b-caption">※ 審核需 3 個工作天審核，平台審核過程中若編輯資訊須重新進行審核</p>
+                        </div>
+                        <div class="modal-footer justify-content-center pt-none">
+                          <button class="b-btn-default outline w-100" data-size="lg" type="button" onclick="window.location.href='./CP2.3_assets-list.html'">返回資產清單</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 駁回-->
+                  <div class="modal fade" id="rejectConfirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-img" data-type="warning"></div>
+                      <div class="modal-content">
+                        <div class="modal-body text-center">
+                          <h3 class="modal-title">確定駁回？</h3>
+                          <p class="pb-sm">駁回後該筆資料將會退回草稿以待再次提出審核</p>
+                          <textarea class="b-textarea m-none" rows="4" cols="48" v-model="rejectReson" placeholder="輸入駁回原因" maxlength="240" required></textarea>
+                        </div>
+                        <div class="modal-footer justify-content-center pt-none">
+                          <button class="b-btn-default outline w-100" data-size="lg" type="button" data-toggle="modal" :disabled="!rejectReson" data-target="#rejected">確認</button>
+                          <button class="b-btn-default text w-100" data-size="md" type="button" data-dismiss="modal">取消</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- 已駁回-->
+                  <div class="modal fade" id="rejected" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm" role="document">
+                      <div class="modal-img" data-type="success"></div>
+                      <div class="modal-content">
+                        <div class="modal-body text-center">
+                          <h3 class="modal-title">已駁回</h3>
+                        </div>
+                        <div class="modal-footer justify-content-center pt-none">
+                          <button class="b-btn-default outline w-100" data-size="lg" type="button" onclick="window.location.href='./CP2.3_assets-list.html'">返回資產清單</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-default text mr-none pr-md" data-size="lg" onclick="window.location.href='./CP2.3_assets-list.html'">返回資產清單 </button>
+                  <button class="b-btn-default outline" data-size="lg" type="button" data-toggle="modal" data-target="#rejectConfirm">駁回</button>
+                  <button class="b-btn-primary" data-size="lg" type="submit" data-toggle="modal" data-target="#checkedSent" :disabled="!checked">送出平台審核</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('資產審核');
+      
+      var jQfn = function (){
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  topAttribute: `
+                      <p>商品清單右下角的屬性最大值</p>
+                      <img class='w-100' src='./img/demo/top-attribute.png', alt=''/>
+                  `,
+                  previewBackpack: `
+                      <p>資產在背包內呈現所使用的圖片</p>
+                      <p>圖片安全範圍示意</p>
+                      <img class='w-100' src='./img/demo/safe.png', alt=''/>
+                      <p>背包資產細節</p>
+                      <img class='w-100' src='./img/demo/backpack-list.png', alt=''/>
+                      <img class='w-100' src='./img/demo/backpack-detail.png', alt=''/>
+                      `,
+                  previewGmall: `
+                      <p>資產在fun市集中呈現的圖檔</p>
+                      <div class='d-flex'>
+                          <div class='w-100 pr-xs'>
+                              <p>大型圖檔</p>
+                              <img class='w-100' src='./img/demo/IIO-big.png', alt=''/>
+                          </div>
+                          <div class='w-100 pr-xs'>
+                              <p>小型圖檔</p>
+                              <img class='w-100' src='./img/demo/IIO-small.png', alt=''/>
+                          </div>
+                          <div class='w-100'>
+                              <p>商品清單</p>
+                              <img class='w-100' src='./img/demo/IIO-list.png', alt=''/>
+                          </div>
+                      </div>
+                  `,
+                  checkText: '已確認內容',
+                  checked: false,
+                  checkboxs: [
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                      { value: false },
+                  ],
+                  submitBtnStatus: {
+                      disabled: false,
+                  },
+                  attribute: [
+                      {label: '等級', name:'level', value: 5},
+                      {label: '顏色', name:'color', value: "紅色"},
+                      {label: '天賦', name:'given', value: "舉一反三"}
+                  ],
+                  assetName: {
+                      value: '小丸子帽子',
+                      placeholder: '請填寫資產名稱',
+                      maxlength: 20,
+                  },
+                  assetDesc: {
+                      value: '商品描述',
+                      placeholder: '請填寫資產說明',
+                      maxlength: 1000,
+                  },
+                  assetRule: [
+                      {
+                          label: '贈與',
+                          name: 'give',
+                          value: true,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由贈與給beanfun!中的任一好友。',
+                      },
+                      {
+                          label: '交換',
+                          name: 'exchange',
+                          value: true,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由與beanfun!中的任一好友進行交換。',
+                      },
+                      {
+                          label: '刊登(fun市集)',
+                          name: 'publish',
+                          value: true,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由將資產刊登到fun市集進行販售。',
+                      },
+                      {
+                          label: '放入遊戲',
+                          name: 'itg',
+                          value: false,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者將資產放入遊戲進行運用。',
+                      },
+                      {
+                          label: '自遊戲回背包',
+                          name: 'gti',
+                          value: false,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者將遊戲中的資產轉換回背包。',
+                      },
+                      {
+                          label: '串接區塊鏈錢包',
+                          name: 'bc',
+                          value: false,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由將該資產上練。',
+                      },
+                      {
+                          label: '可轉為實體商品',
+                          name: 'real',
+                          value: false,
+                          show: true,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可轉換為實體商品。',
+                      },
+                  ],
+                  assetRuleValidation:'',
+                  imgSize: 'big',
+                  rejectReson: '',
+              }
+          },
+          watch: {
+              checkboxs:{
+                  handler: function(){
+                      let result = this.checkboxs.every(function(item, index, array) {
+                          if (item.value) {
+                              return item
+                          }
+                      })
+                      this.checked = result
+                  }, 
+                  deep:true
+              },
+          },
+          methods: {
+              saveForm: function (){
+                  this.submitBtnStatus.disabled = true  
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+    </script>
+  </body>
+</html>

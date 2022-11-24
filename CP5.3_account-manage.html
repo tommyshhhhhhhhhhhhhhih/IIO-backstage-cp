@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>帳號管理</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap animated fadeIn" id="app">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"> 營運後台>後台設定>帳號管理
+              </div>
+              <div class="title-wrap">
+                <div class="info">
+                  <h2 class="text-h2">帳號管理
+                  </h2>
+                </div>
+                <div class="toolbar"> <a class="b-btn-primary" data-size="md" href="./8.1.1_account-detail.html"><span class="material-icons">add</span><span>新增帳號</span></a>
+                </div>
+                <div class="b-caption w-100">帳號權限設定與管理
+                </div>
+              </div>
+              <div class="b-search-group">
+                    <div class="b-text-field">
+                      <label>帳號
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label>名稱
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-text-field">
+                  <label>廠商</label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="['供應商一', '供應商二', '供應商三']" v-model="search.cp" placeholder="全部廠商" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="b-text-field">
+                  <label>角色分組</label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="['商城管理員','fun市集管理員', '行銷','客服','營運']" v-model="search.role" placeholder="全部角色分組" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="b-text-field">
+                  <label>資料權限</label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="['小丸子', '天堂M','新楓之谷']" v-model="search.data" placeholder="全部資料權限" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">狀態
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="狀態" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="啟用" name="狀態" value="啟用">
+                            <label for="啟用">啟用</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="鎖定" name="狀態" value="鎖定">
+                            <label for="鎖定">鎖定</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="註銷" name="狀態" value="註銷">
+                            <label for="註銷">註銷</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-search-buttons">
+                      <button class="b-btn-default ladda-button" data-size="md" data-style="slide-left" type="button"><span class="ladda-label"><i class="fa fa-search"></i>查詢</span><span class="ladda-spinner"></span>
+                        <div class="ladda-progress" style="width:0"></div>
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="content">
+              <div class="b-table-wrap">
+                <div class="table-responsive">
+                  <table class="table table-hover" id="accountList">
+                    <thead> 
+                      <tr>
+                        <th>狀態</th>
+                        <th>帳號</th>
+                        <th>名稱</th>
+                        <th>隸屬</th>
+                        <th>角色分組</th>
+                        <th>資料權限</th>
+                        <th>更新時間</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template> 
+                        <tr v-for="item,idx in dataGrid">
+                          <td> <span class="b-caption">{{status[item.status].label}}</span></td>
+                          <td> <span>{{ item.account }}</span></td>
+                          <td> <span>{{ item.userName }}</span></td>
+                          <td> <span>{{ item.vendor }}</span></td>
+                          <td> 
+                            <template v-for="role,idx in item.roleGroup"> 
+                              <sapn v-if="idx &lt; 1">{{ group[role] }}</sapn><span v-else>, {{ group[role] }}</span>
+                            </template>
+                          </td>
+                          <td> 
+                            <template v-for="data,idx in item.dataAuth"> 
+                              <sapn v-if="idx &lt; 1">{{ dataType[data] }}</sapn><span v-else>, {{ dataType[data] }}</span>
+                            </template>
+                          </td>
+                          <td> <span class="b-caption">{{ item.update_time }}</span></td>
+                          <td><a class="b-btn-default text m-none px-xs" data-size="sm" href="CP5.3.1_account-detail.html">查看 </a><a class="b-btn-default text m-none px-xs" data-size="sm" href="CP5.3.1_account-detail.html">編輯 </a><a class="b-btn-default text m-none px-xs" data-size="sm" href="" data-toggle="modal" v-if="item.status &lt; 2" data-target="#deleteConfirm">註銷</a></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- 確認停用-->
+              <div class="modal fade" id="deleteConfirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="error"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">停用確認</h3>
+                      <p>停用後帳號將無法使用，確定執行？</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-danger" data-size="lg" type="button" onclick="closeModal('#deleteConfirm', 'y')">確認</button>
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" onclick="closeModal('#deleteConfirm', 'y')">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vue-->
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- table plugin-->
+    <script src="js/datatables.min.js"></script>
+    <!-- input plugin-->
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('帳號管理');
+      
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              search: {
+                  cp: '',
+                  role: '',
+                  data: ''
+              },
+              status: [
+                  {label: '啟用', markColor: 'success'},
+                  {label: '鎖定', markColor: 'warning'},
+                  {label: '註銷', markColor: 'draft'}
+              ],
+              group: ['admin','商城管理員', 'fun市集管理員','營運', '行銷', '客服'],
+              dataType:['小丸子', '天堂M','新楓之谷',],
+              dataGrid: [
+                  {
+                      status: 0,
+                      account:'aaa@gashpoint.com',
+                      userName: '王大明',
+                      vendor: '台灣樂點',
+                      roleGroup: [1,3],
+                      dataAuth: [1],
+                      update_time: '2021/8/9 19:00',
+                  },{
+                      status: 0,
+                      account:'bbb@gashpoint.com',
+                      userName: '李大明',
+                      vendor: '台灣樂點',
+                      roleGroup: [5],
+                      dataAuth: [0,1,2,3],
+                      update_time: '2021/8/9 19:00',
+                  },{
+                      status: 1,
+                      account:'ccc@gashpoint.com',
+                      userName: '張大明',
+                      vendor: '台灣樂點',
+                      roleGroup: [4],
+                      dataAuth: [0,1,2],
+                      update_time: '2021/8/9 19:00',
+                  },{
+                      status: 2,
+                      account:'ddd@gashpoint.com',
+                      userName: '吳大明',
+                      vendor: '台灣樂點',
+                      roleGroup: [3],
+                      dataAuth: [1],
+                      update_time: '2021/8/9 19:00',
+                  },
+              ],
+          },
+          methods: {
+              
+          },
+          mounted: function () {
+          }
+      })
+      $(document).ready(function() {
+          $('#accountList').DataTable({
+              "columnDefs": [{ targets: 'no-sort', orderable: false }],
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+              paging:         true,
+              searching: false,
+              fixedColumns:   {
+                  left: 1,
+                  right: 1
+              }
+          });
+      
+      } );
+    </script>
+  </body>
+</html>

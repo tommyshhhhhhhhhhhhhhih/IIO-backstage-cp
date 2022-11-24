@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>退款申請</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>客服管理>退款申請
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">退款申請
+                  </h2>
+                </div>
+                <fieldset>
+                  <div class="b-text-field d-block">
+                    <label>訂單編號</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.orderId }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>訂單途徑</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.path }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>提供者</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.provider }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>購買商品</label>
+                    <div class="b-field-row">
+                      <p class="readonly"> <a :href="orderDetail.item.link">{{ orderDetail.item.label }}</a></p>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>商品價格</label>
+                    <div class="b-field-row">
+                      <p class="readonly">{{ '$ ' + orderDetail.item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' TWD'}}</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>PIN</label>
+                    <div class="b-field-row mb-none">
+                      <div class="d-flex align-items-start">
+                        <input class="b-input w-100" id="copyContent" readonly :value="orderDetail.item.id" v-model="orderDetail.item.id">
+                        <button class="b-btn-default outline mb-none" data-size="sm" type="button" @click="copyID('#copyContent')"> 
+                          <template v-if="copyBtn"> <span>已複製 </span></template>
+                          <template v-else> <span class="material-icons ml-none mr-xxs fz-sm">copy</span><span>複製 </span></template>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>資產狀態</label>
+                    <div class="b-field-group">
+                      <p class="readonly">資產退貨緣由...</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>操作</label>
+                    <div class="b-field-group">
+                      <template v-if="!refundSent">
+                        <button class="b-btn-danger outline mb-none" data-size="sm" type="button" @click="openResult(true)">同意退款 </button>
+                        <button class="b-btn-danger outline mb-none" data-size="sm" type="button" @click="openResult(false)">駁回退款 </button>
+                      </template>
+                      <template v-else>
+                        <p class="readonly" v-if="refundResult">已同意退款</p>
+                        <template v-else>
+                          <p class="readonly">已駁回申請</p>
+                          <p class="readonly">{{  refundReason.value}} </p>
+                        </template>
+                      </template>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-secondary outline" data-size="lg" type="button" onclick="window.location.href='./6.1_search-order.html'">返回訂單列表</button>
+                </div>
+              </form>
+              <!-- 操作-->
+              <div class="modal fade" id="refundResult" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document" :class="refundResult? 'modal-sm':''">
+                  <div class="modal-img" data-type="warning"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <template v-if="refundResult">
+                        <h3 class="modal-title">確定同意退款？</h3>
+                        <p class="t-c">確認後將進行帳務退款流程</p>
+                      </template>
+                      <template v-else>
+                        <h3 class="modal-title">確定駁回申請？</h3>
+                        <p class="t-c mb-sm">確認後將駁回退款申請</p>
+                        <textarea class="b-textarea" rows="4" cols="48" v-model="refundReason.value" :maxlength="refundReason.maxLength" placeholder="請填寫退款申請的理由" required></textarea><span class="b-input-hint">({{ refundReason.value.length }}/{{refundReason.maxLength}})</span>
+                      </template>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary" data-size="lg" type="button" :data-loading="btnLoading.sendRefund" :disabled="!refundResult &amp;&amp; !refundReason.value" @click="sendResult">確認</button>
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" data-dismiss="modal">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 送出-->
+              <div class="modal fade" id="success" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">送出成功</h3>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default outline" data-size="lg" type="button" data-dismiss="modal">關閉</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('退貨申請');
+      var jQfn = function (){
+      
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  orderDetail: {
+                      orderId: 'ORD-1562792771583',
+                      userId: 'aaa123456',
+                      path: 'B2C 商城',
+                      provider: 'OO供應商',
+                      phone: '0912345678',
+                      mail: 'deanna.curtis@example.com',
+                      item: {
+                          link: 'javascript:;',
+                          label: '[熱門] 超級厲害又可愛的小丸子鞋子(點擊外開商品頁)',
+                          id: 'asdlifjalsifdj',
+                          price: 1688,
+                          history: [
+                              {
+                                  time: '2021-10-29 04:03 AM',
+                                  activity: '取消刊登'
+                              },
+                              {
+                                  time: '2021-10-25 09:06 AM',
+                                  activity: '刊登至fun市集'
+                              },
+                              {
+                                  time: '2021-10-24 09:06 AM',
+                                  activity: '自遊戲回背包'
+                              },
+                              {
+                                  time: '2021-10-06 09:06 AM',
+                                  activity: '自背包到遊戲'
+                              },
+                          ]
+                      },
+                      price: 1688,
+                      assetState: '',
+                  },
+                  btnLoading: {
+                      refund: false,
+                      sendRefund: false,
+                  },
+                  refundReason: {
+                      value: '',
+                      maxLength: 200
+                  },
+                  copyBtn: false,
+                  refundResult: false,
+                  refundSent: false,
+              }
+          },
+          watch: {
+          },
+          methods: {
+              openResult: function(result) {
+                  this.refundResult = result
+                  $('#refundResult').modal('show')
+              }, 
+              copyID: function(id) {
+                  let copyText = document.querySelector(id);
+                  console.log(copyText);
+                  vm.copyBtn = true
+                  copyText.select();
+                  document.execCommand("copy");
+                  window.setTimeout(function(){
+                      vm.copyBtn = false
+                  }, 2000);
+      
+              },
+              sendResult: function(){
+                  this.btnLoading.sendRefund = true
+                  window.setTimeout(function(){
+                      vm.btnLoading.sendRefund = false
+                      vm.refundSent = true
+                      $('#refundResult').modal('hide')
+                      $('#success').modal('show')
+                  }, 2000);
+              },
+              saveForm: function (){
+                  this.submitBtnStatus.disabled = true  
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+    </script>
+  </body>
+</html>

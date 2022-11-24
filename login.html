@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>登入</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <div class="p-md">
+        <div class="container" id="login">
+          <div class="thumbnail animated flipInX">
+            <div class="row align-items-stretch jusify-content-center">
+              <form class="login-form" id="form0" @submit.prevent="SubmitFunction" method="post">
+                <div class="login-logo"><img src="img/logo.svg" alt=""></div>
+                <p class="greeting pb-md">歡迎使用廠商後台</p>
+                <label class="login-input-label">帳號</label>
+                <div class="login-input b-input-wrap"><span class="material-icons md-24">person</span>
+                  <input class="input-lg b-input" value="" name="Account" placeholder="請輸入帳號" type="text">
+                </div>
+                <label class="login-input-label">密碼</label>
+                <div class="login-input b-input-wrap" data-type="pw"><span class="material-icons md-24">lock</span>
+                  <input class="input-lg b-password" value="" name="Password" placeholder="請輸入密碼" type="password">
+                </div>
+                    <div class="b-checkbox">
+                      <input type="checkbox" id="remember">
+                      <label for="remember">記住我的帳號</label>
+                    </div>
+                <button class="b-btn-primary my-sm" data-size="lg" data-style="slide-down" data-ladda="true">&#x78BA;&#x8A8D;</button>
+                <div class="alert alert-danger fade-in" role="alert" :class="{'show': errorMsg}"><i class="fa fa-exclamation-triangle"></i>密碼錯誤，累計錯誤 3 次後將鎖定您的帳號。</div>
+              </form>
+              <div class="login-img"> </div>
+            </div>
+            <p class="login-footer animated fadeIn">&copy;2021 GASH Co, Ltd. All Right Reserved.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="LockAccount" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-img" data-type="error"></div>
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <h3 class="modal-title">帳戶已鎖定</h3>
+              <p>密碼累計錯誤達 3 次，基於安全性考量鎖定該帳戶，帳戶開通請洽相關單位。</p>
+            </div>
+            <div class="modal-footer justify-content-center pt-none">
+              <button class="b-btn-default" data-size="lg" type="button" data-dismiss="modal" onclick="window.location.href='./change-pw.html'">確認</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              errorMsg: false,
+          }, 
+          methods: {
+              SubmitFunction() {
+                  $('#LockAccount').modal('show')
+                  this.errorMsg = true
+                  return false;
+              }
+          }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+  <title>元件</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/flatpickr.css" rel="stylesheet">
+  <link href="css/vue-select.css" rel="stylesheet">
+  <link href="css/datatables.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <link href="css/table.css" rel="stylesheet">
+  <link href="css/element.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+  <div class="d-flex" id="app">
+    <!-- nav -->
+    <div class="element-menu">
+      <h1 class="menu-title text-h4">
+        <a href="#title">後台 UI</a>
+      </h1>
+      <ul>
+        <template v-for="item in menus">
+          <li :class="item.option? 'group': ''" :data-active="currentPage === item.id">
+            <template v-if="item.option">
+              <div class="d-flex" @click="item.submenuExpand = !item.submenuExpand">
+                <a class="element-menu-item">{{item.name}}</a>
+                <div class="arrow" :data-expand="item.submenuExpand">
+                  <img src="./img/icon/icon-arrow-down.svg" alt="">
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="d-flex">
+                <a class="element-menu-item" :href="'#'+item.id" @click="currentPage = item.id">{{item.name}}</a>
+              </div>
+            </template>
+            <ul class="sub-menu" :data-expand="item.submenuExpand" v-if="item.option">
+              <template v-for="subitem in item.option">
+                <li :data-active="currentPage === subitem.id" @click="currentPage = subitem.id">
+                  <a :href="'#'+subitem.id">{{subitem.name}}</a>
+                </li>
+              </template>
+            </ul>
+          </li>
+        </template>
+      </ul>
+      <div class="copyright px-sm">©2021 GASH Co, Ltd. All Right Reserved.</div>
+    </div>
+
+    <!-- content -->
+    <div class="element-content animated fadeIn" id="main-content">
+      <h2 id="title" class="text-h1 index-title">後台 UI 元件</h2>
+      <p>後台使用到的UI元件、變數、樣式、設定說明</p>
+      <!-- color -->
+      <h3 id="color" class="text-h3 pt-xl">Color</h3>
+      <div class="d-flex f-wrap">
+        <div class="color-card" v-for="color in colors">
+          <div class="color" :style="'background:'+ color.color"></div><span>{{ color.name }}</span>
+        </div>
+      </div>
+      <!-- alert -->
+      <h3 id="alert" class="text-h3 pt-xl">Alert</h3>
+      <div>
+        <div class="alert alert-danger d-inline-block">訊息內容</div>
+        <div class="alert alert-warning d-inline-block">訊息內容</div>
+        <div class="alert alert-info d-inline-block">訊息內容</div>
+        <div class="alert alert-success d-inline-block">訊息內容</div>
+        <pre><code class="html">
+    &lt;div class="alert alert-danger d-inline-block"&gt;訊息內容&lt;/div&gt; 
+        </code></pre>
+        <table class="element-table table shadow-1 mb-xl" style="width: 600px">
+          <tr>
+            <td>顏色 </td>
+            <td>danger, warning, info, success </td>
+          </tr>
+        </table>
+      </div>
+      <!-- badge -->
+      <h3 id="badge" class="text-h3 pt-xl">Badge</h3>
+      <div>
+        <span class="badge-draft">badge</span>
+        <span class="badge-danger">badge</span>
+        <span class="badge-warning">badge</span>
+        <span class="badge-info">badge</span>
+        <span class="badge-success">badge</span>
+        <pre><code class="html mt-md">
+    &lt;span class="badge-draft"&gt;badge&lt;/span&gt; 
+        </code></pre>
+        <table class="element-table table shadow-1 mb-xl" style="width: 600px">
+          <tr>
+            <td>顏色 </td>
+            <td>draft, danger, warning, info, success </td>
+          </tr>
+        </table>
+      </div>
+      <!-- button -->
+      <h3 id="button" class="text-h3 pt-xl">Button</h3>
+      <div>
+        <div class="d-flex f-wrap align-items-start">
+          <button class="b-btn-default" data-size="xs">Button </button>
+          <button class="b-btn-default" data-size="sm">Button </button>
+          <button class="b-btn-default" data-size="md">Button </button>
+          <button class="b-btn-default" data-size="lg">Button </button>
+          <button class="b-btn-default" data-size="xl">Button </button>
+        </div>
+        <div class="pb-md">
+          <button class="b-btn-default" data-size="md">Button </button>
+          <button class="b-btn-primary" data-size="md">Button </button>
+          <button class="b-btn-primary-light" data-size="md">Button </button>
+          <button class="b-btn-secondary" data-size="md">Button </button>
+          <button class="b-btn-secondary-light" data-size="md">Button </button>
+          <button class="b-btn-success" data-size="md">Button </button>
+          <button class="b-btn-danger" data-size="md">Button </button>
+        </div>
+        <div class="pb-md">
+          <button class="b-btn-default" data-size="md">Button </button>
+          <button class="b-btn-default outline" data-size="md">Button </button>
+          <button class="b-btn-default flat" data-size="md">Button </button>
+          <button class="b-btn-default" disabled data-size="md">Button </button>
+          <button class="b-btn-default" data-loading="true" data-size="md">Button </button>
+        </div>
+        <!-- 按鈕程式碼 -->
+        <pre><code class="html">
+  &lt;button data-size="xs" class="b-btn-secondary"&gt;Button&lt;/button&gt; 
+        </code></pre>
+        <table class="element-table table shadow-1 mb-xl" style="width: 600px">
+          <tr>
+            <td>按鈕尺寸 </td>
+            <td>xs, sm, md, lg, xl 修改 data-size 屬性 </td>
+          </tr>
+          <tr>
+            <td>按鈕顏色 </td>
+            <td>.b-btn-default, .b-btn-primary, .b-btn-primary-light, .b-btn-secondary, .b-btn-secondary-light,
+              .b-btn-success, .b-btn-danger</td>
+          </tr>
+          <tr>
+            <td>按鈕類型 </td>
+            <td>預設, outline, flat </td>
+          </tr>
+        </table>
+      </div>
+      <!-- dropdown -->
+      <h3 id="dropdown" class="text-h3 pt-xl">Dropdown</h3>
+      <div>
+        <p class="mb-sm">使用 bootstrap 4 的 dropdown</p>
+        <div class="btn-group" style="width: 2rem">
+          <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false"><span class="material-icons">notifications</span><span
+              class="red-dot"></span></button>
+          <div class="dropdown-menu dropdown-menu-right">
+            <ul class="dropdown-list">
+              <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                <div class="date"><span>今天</span><span>16:55</span></div>
+              </li>
+              <li class="dropdown-item read">
+                <div class="dropdown-info">
+                  <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                </div>
+                <div class="date"><span>8-12</span></div>
+              </li>
+              <li class="dropdown-item read">
+                <div class="dropdown-info">
+                  <p class="b-caption">[審核通過] 小丸子裙子</p>
+                </div>
+                <div class="date"><span>8-12</span></div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <pre><code class="html">
+    &lt;div class="btn-group" style="width: 2rem"&gt; 
+      &lt;button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"&gt; &lt;span class="material-icons"&gt; notifications&lt;/span&gt; &lt;span class="red-dot"&gt; &lt;/span&gt; &lt;/button&gt; 
+      &lt;div class="dropdown-menu dropdown-menu-right"&gt; 
+        &lt;ul class="dropdown-list"&gt; 
+          &lt;li class="dropdown-item"&gt; &lt;a class="dropdown-info"&gt; &lt;span class="b-caption"&gt; [審核通過] 小丸子帽子&lt;/span&gt; &lt;/a&gt; 
+            &lt;div class="date"&gt; &lt;span&gt; 今天&lt;/span&gt; &lt;span&gt; 16:55&lt;/span&gt; &lt;/div&gt; 
+          &lt;/li&gt; 
+          &lt;li class="dropdown-item read"&gt; 
+            &lt;div class="dropdown-info"&gt; 
+              &lt;p class="b-caption"&gt; [審核通過] 小丸子鞋子&lt;/p&gt; 
+            &lt;/div&gt; 
+            &lt;div class="date"&gt; &lt;span&gt; 8-12&lt;/span&gt; &lt;/div&gt; 
+          &lt;/li&gt; 
+          &lt;li class="dropdown-item read"&gt; 
+            &lt;div class="dropdown-info"&gt; 
+              &lt;p class="b-caption"&gt; [審核通過] 小丸子裙子&lt;/p&gt; 
+            &lt;/div&gt; 
+            &lt;div class="date"&gt; &lt;span&gt; 8-12&lt;/span&gt; &lt;/div&gt; 
+          &lt;/li&gt; 
+        &lt;/ul&gt; 
+      &lt;/div&gt; 
+    &lt;/div&gt; 
+        </code></pre>
+      </div>
+      <!-- form -->
+      <h3 id="form" class="text-h3 pt-xl">Form</h3>
+      <div>
+        <!-- 文字 -->
+        <h5 id="text" class="text-h5">text input</h5>
+        <div class="b-text-field d-block">
+          <label>文字欄位<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="備註內容"><span
+                class="material-icons">info</span></span></label>
+          <div class="b-field-group">
+            <div class="b-field-row mb-none">
+              <div class="b-input-wrap">
+                <input class="b-input" type="text" v-model="form.input" maxlength="20" placeholder="文字欄位">
+                <span class="b-input-hint">({{form.input.length}}/20)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;div class="b-text-field d-block"&gt;
+  &lt;label&gt;文字欄位 // 欄位標題
+    &lt;span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="備註內容"&gt;  // tooltip 備註
+      &lt;span class="material-icons"&gt;info&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/label&gt;
+  &lt;div class="b-field-group"&gt; // 輸入區塊
+    &lt;div class="b-field-row mb-none"&gt; // 輸入區塊單列
+      &lt;div class="b-input-wrap"&gt; // 單個 input
+        &lt;input class="b-input" type="text" placeholder="文字欄位"&gt; // input
+        &lt;span class="b-input-hint"&gt;(0/20)&lt;/span&gt; // 字數限制或欄位補述
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+        <!-- textarea -->
+        <h5 id="textarea" class="text-h5">textarea</h5>
+        <div class="b-text-field d-block">
+          <div class="b-field-row">
+            <div class="b-input-wrap">
+              <textarea class="b-textarea" rows="4" cols="48" v-model="form.textarea" placeholder="請輸入文字"
+                maxlength="1000" required></textarea>
+              <span class="b-input-hint">({{ form.textarea.length }}/1000)</span>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;div class="b-text-field d-block"&gt;
+  &lt;div class="b-field-row"&gt;
+    &lt;div class="b-input-wrap"&gt;
+      &lt;textarea class="b-textarea" rows="4" cols="48" v-model="form.textarea"
+        placeholder="請輸入文字" maxlength="1000" required&gt;&lt;/textarea&gt;
+        &lt;span class="b-input-hint"&gt;({{ form.textarea.length }}/1000)&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+        <!-- 單選 -->
+        <h5 id="radio" class="text-h5">radio</h5>
+        <div class="b-field-row mb-md">
+          <div class="b-radio mb-none">
+            <input type="radio" id="value1" value="value1" name="radio" checked>
+            <label for="value1">選項一</label>
+          </div>
+          <div class="b-radio mb-none">
+            <input type="radio" id="value2" value="value2" name="radio">
+            <label for="value2">選項二</label>
+          </div>
+          <div class="b-radio mb-none">
+            <input type="radio" id="value3" value="value3" name="radio">
+            <label for="value3">選項三</label>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;div class="b-radio mb-none"&gt;
+  &lt;input type="radio" id="value1" value="value1" name="checkbox" checked&gt;
+  &lt;label for="value1"&gt;選項一&lt;/label&gt; 
+&lt;/div&gt;
+        </code></pre>
+        <!-- 勾選 -->
+        <h5 id="checkbox" class="text-h5">checkbox</h5>
+        <div class="b-field-row mb-md">
+          <div class="b-checkbox mb-none">
+            <input type="checkbox" id="checkbox1" value="checkbox1" name="checkbox" checked>
+            <label for="checkbox1">選項一</label>
+          </div>
+          <div class="b-checkbox mb-none">
+            <input type="checkbox" id="checkbox2" value="checkbox2" name="checkbox">
+            <label for="checkbox2">選項二</label>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;div class="b-checkbox mb-none"&gt;
+  &lt;input type="checkbox" id="checkbox1" value="checkbox1" name="checkbox" checked&gt;
+  &lt;label for="checkbox1"&gt;選項一&lt;/label&gt; 
+&lt;/div&gt;
+        </code></pre>
+        <!-- select -->
+        <h5 id="select" class="text-h5">select</h5>
+        <div class="b-text-field d-block">
+          <div class="b-field-group">
+            <div class="b-field-row">
+              <div class="b-input-wrap">
+                <v-select class="b-select" placeholder="請選擇內容" :options="form.select.option"
+                  v-model="form.select.value"></v-select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;v-select class="b-select" placeholder="請選擇內容" :options="form.select.option" v-model="form.select.value"&gt;&lt;/v-select&gt;
+        </code></pre>
+        <p class="caption">更多關於 vue select 的說明 <a class="link-primary"
+            href="https://vue-select.org/api/props.html#clearable" target="_blank">請見此處</a>。</p>
+        <!-- datepicker -->
+        <h5 id="datepicker" class="text-h5">datepicker/timepicker</h5>
+        <div class="b-text-field d-block">
+          <div class="b-field-row mb-none">
+            <div class="b-input-wrap">
+              <input class="b-input mr-none" id="date" type="text" v-model="form.date" placeholder="日期">
+            </div>
+            <div class="b-input-wrap">
+              <input class="b-input mr-none" id="time" type="text" v-model="form.time" placeholder="時間">
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;v-select class="b-select" placeholder="請選擇內容" :options="form.select.option" v-model="form.select.value"&gt;&lt;/v-select&gt;
+        </code></pre>
+        <p class="caption">更多關於 flatpickr 的說明 <a class="link-primary" href="https://flatpickr.js.org/examples/"
+            target="_blank">請見此處</a>。</p>
+        <!-- upload -->
+        <h5 id="upload" class="text-h5">upload</h5>
+        <h6 class="text-h6">vue 寫法</h6>
+        <div class="b-text-field d-block">
+          <label>bf!背包圖示<span>*</span><span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack"><span class="material-icons">info</span></span></label>
+          <div class="b-field-group"> 
+            <div class="b-field-row mb-none">
+              <label class="b-btn-primary outline ml-none" for="previewImg" data-size="md">選擇檔案
+                <input type="file" id="previewImg" accept=".png, .jpg, .jpeg" @change="backpackImgPreview">
+              </label>
+              <p class="mx-sm mt-xxs" v-if="previewImg.name">{{ previewImg.name }} ({{ previewImg.size }}KB)</p>
+              <span class="b-caption d-block pt-xs">670x376 .jpg or .png (<100KB)</span>
+            </div>
+            <div class="b-field-row mb-none">
+              <template v-if="previewImg.value">
+                <div class="img-preview mb-md" data-type="backpack"><img :src="previewImg.value"></div>
+              </template>
+              <template v-if="previewImg.alert">
+                <div class="alert alert-danger">{{ previewImg.name }} {{ previewImg.alert }}</div>
+              </template>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+&lt;!-- vue 的寫法 --&gt;
+&lt;div class="b-text-field d-block"&gt;
+  &lt;label&gt;bf!背包圖示&lt;span&gt;*&lt;/span&gt;&lt;span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack"&gt;&lt;span class="material-icons"&gt;info&lt;/span&gt;&lt;/span&gt;&lt;/label&gt;
+  &lt;div class="b-field-group"&gt; 
+    &lt;div class="b-field-row mb-none"&gt;
+      &lt;label class="b-btn-primary outline ml-none" for="previewImg" data-size="md"&gt;選擇檔案
+        &lt;input type="file" id="previewImg" accept=".png, .jpg, .jpeg" @change="backpackImgPreview"&gt;
+      &lt;/label&gt;
+      &lt;p class="mx-sm mt-xxs" v-if="previewImg.name"&gt;{{ previewImg.name }} ({{ previewImg.size }}KB)&lt;/p&gt;
+      &lt;span class="b-caption d-block pt-xs"&gt;670x376 .jpg or .png (&lt;100KB)&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="b-field-row mb-none"&gt;
+      &lt;template v-if="previewImg.value"&gt;
+        &lt;div class="img-preview mb-md" data-type="backpack"&gt;&lt;img :src="previewImg.value"&gt;&lt;/div&gt;
+      &lt;/template&gt;
+      &lt;template v-if="previewImg.alert"&gt;
+        &lt;div class="alert alert-danger"&gt;{{ previewImg.name }} {{ previewImg.alert }}&lt;/div&gt;
+      &lt;/template&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+        </code></pre>
+        <pre><code class="js">
+  &lt;!-- vue 的寫法 --&gt;
+  var vm = new Vue({
+    el: '#app',
+    data() {
+      previewImg:{
+        value: '',
+        name: '',
+        alert: '',
+        validation: true,
+      },
+    },
+    methods: {
+      backpackImgPreview: function(e) {
+        const file = e.target.files[0];
+        this.previewImg.name = file.name;
+        if( file.size / 1024 < 80) {
+          this.previewImg.value = URL.createObjectURL(file);
+          this.previewImg.size = (file.size / 1024).toFixed(2);
+          this.previewImg.alert = ''
+        } else {
+          this.previewImg.value = '';
+          this.previewImg.size = '';
+          this.previewImg.alert = '檔案尺寸過大'
+        }
+      },
+    }
+  })
+        </code></pre>
+
+        <h6 class="text-h6">jQuery 寫法</h6>
+        <div class="b-text-field d-block pt-xs">
+          <label>商品說明圖<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" title="&lt;p&gt;詳細說明中的圖檔&lt;/p&gt;&lt;img class='w-100' src='./img/demo/content-img.png' alt=''/&gt;"><span class="material-icons">info</span></span></label>
+          <div class="b-field-group"> 
+            <div class="b-field-row mb-xs">
+              <label class="b-btn-primary outline ml-none" for="previewImg2" data-size="md">選擇檔案
+                <input type="file" id="previewImg2" accept=".png, .jpg, .jpeg" multiple="multiple">
+              </label>
+              <p class="b-caption pt-xs">最多上傳五張，大小不得超過 1 MB</p>
+            </div>
+            <div class="b-field-row">
+              <div class="upload-img-preview"><img class="preview" data-size="small" :src="previewImg2.src">
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+  &lt;!-- jQuery 的寫法 --&gt;
+  &lt;div class="b-text-field d-block pt-xs"&gt;
+    &lt;label&gt;商品說明圖&lt;span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" title="&lt;p&gt;詳細說明中的圖檔&lt;/p&gt;&lt;img class='w-100' src='./img/demo/content-img.png' alt=''/&gt;"&gt;&lt;span class="material-icons"&gt;info&lt;/span&gt;&lt;/span&gt;&lt;/label&gt;
+    &lt;div class="b-field-group"&gt; 
+      &lt;div class="b-field-row mb-xs"&gt;
+        &lt;label class="b-btn-primary outline ml-none" for="previewImg2" data-size="md"&gt;選擇檔案
+          &lt;input type="file" id="previewImg2" accept=".png, .jpg, .jpeg" multiple="multiple"&gt;
+        &lt;/label&gt;
+        &lt;p class="b-caption pt-xs"&gt;最多上傳五張，大小不得超過 1 MB&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class="b-field-row"&gt;
+        &lt;div class="upload-img-preview"&gt;&lt;img class="preview" data-size="small" :src="previewImg2.src"&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <pre><code class="js">
+  $("#main-content").on("change", "#previewImg2", function (e){
+    let file = e.target.files;
+    vm.previewImg2.name = file[0].name
+    vm.previewImg2.size = size_format_float(file[0].size / 1024, 2);
+    vm.previewImg2.src = URL.createObjectURL(file[0]);
+  })
+  &lt;!-- 一樣用 vue 做資料綁定，也可直接用 jQuery 呼叫 DOM --&gt;
+  var vm = new Vue({
+    el: '#app',
+    data() {
+      previewImg1:{
+        value: '',
+        name: '',
+        alert: '',
+        validation: true,
+      },
+    },
+  })
+        </code></pre>
+        <h6 class="text-h6">預覽尺寸類型</h6>
+        <table class="element-table table shadow-1 mb-xl autosize" style="width: 600px">
+          <tr>
+            <td>[data-type="bc"] </td>
+            <td>
+              <div class="img-preview" data-type="bc">
+                <img src="./img/demo/backpack-detail.png"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>[data-type="backpack"]</td>
+            <td>
+              <div class="img-preview" data-type="backpack">
+                <img src="./img/demo/backpack-detail.png"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>[data-type="marketSmall"]</td>
+            <td>
+              <div class="img-preview" data-type="marketSmall">
+                <img src="./img/demo/backpack-detail.png"/>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>[data-type="marketBig"]</td>
+            <td>
+              <div class="img-preview" data-type="marketBig">
+                <img src="./img/demo/backpack-detail.png"/>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <!-- status -->
+        <h5 id="status" class="text-h5">status</h5>
+        <div class="b-text-field validate-error">
+          <label>文字欄位<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="備註內容"><span
+                class="material-icons">info</span></span></label>
+          <div class="b-field-group">
+            <div class="b-field-row mb-none">
+              <div class="b-input-wrap">
+                <input class="b-input" type="text" v-model="form.input" maxlength="20" placeholder="文字欄位">
+                <span class="b-input-hint">({{form.input.length}}/20)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+  &lt;div class="b-text-field validate-error"&gt;...&lt;/div&gt;
+        </code></pre>
+        <div class="b-text-field">
+          <div class="b-field-row mb-none">
+            <div class="b-input-wrap">
+              <input class="b-input" type="text" disabled maxlength="20" placeholder="文字欄位">
+            </div>
+            <div class="b-input-wrap">
+              <v-select class="b-select" disabled placeholder="請選擇內容" :options="form.select.option"
+                v-model="form.select.value"></v-select>
+            </div>
+            <div class="b-checkbox mb-none">
+              <input type="checkbox" id="checkbox-disabled" disabled value="checkbox-disabled" name="checkbox-disabled"
+                checked>
+              <label for="checkbox-disabled">選項一</label>
+            </div>
+            <div class="b-radio mb-none">
+              <input type="radio" id="radio-disabled" disabled value="radio-disabled" name="radio-disabled" checked>
+              <label for="radio-disabled">選項一</label>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+  //  text
+  &lt;input class="b-input" type="text" disabled maxlength="20" placeholder="文字欄位"&gt;
+  //  select
+  &lt;v-select class="b-select" disabled placeholder="請選擇內容" :options="form.select.option" v-model="form.select.value"&gt;&lt;/v-select&gt;
+  //  checkbox 
+    ...
+  &lt;input type="checkbox" id="checkbox-disabled" disabled value="checkbox-disabled" name="checkbox-disabled" checked&gt;
+    ...
+  //  radio 
+    ...
+  &lt;input type="radio" id="radio-disabled" disabled value="radio-disabled" name="radio-disabled" checked&gt;
+    ...
+      </code></pre>
+
+      </div>
+      <!-- modal -->
+      <h3 id="modal" class="text-h3 pt-xl">Modal</h3>
+      <div class="pb-md">
+        <p class="pb-md">使用 bootstrap 4 的 Modal</p>
+        <h5 id="modalDefault" class="text-h5 mb-xs">一般跳窗</h5>
+        <button class="b-btn-default mb-md" data-size="md" data-toggle="modal" data-target="#previewModal">開啟跳窗</button>
+
+        <!-- 商品預覽-->
+        <div class="modal fade" id="previewModal" data-bs-keyboard="false" tabindex="-1" role="dialog"
+          aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content bg">
+              <div class="modal-body">
+                <h3 class="modal-title">modal 標題</h3>
+                <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. A dolore est temporibus vel laboriosam
+                  molestias nostrum impedit velit quasi, error molestiae, eveniet ipsa non asperiores necessitatibus
+                  eum. Pariatur, quia enim.</p>
+              </div>
+              <div class="modal-footer justify-content-center pt-none">
+                <button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" data-dismiss="modal">送出</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+  // modal trigger
+  &lt;button class="b-btn-default" data-size="md" data-toggle="modal" data-target="#previewModal"&gt;開啟跳窗&lt;/button&gt;
+
+  // modal content
+  &lt;div class="modal fade" id="previewModal" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"&gt;
+    &lt;div class="modal-dialog modal-dialog-scrollable" role="document"&gt;
+      &lt;div class="modal-content bg"&gt;
+        &lt;div class="modal-body"&gt;
+          // modal 標題
+          &lt;h3 class="modal-title"&gt;modal 標題&lt;/h3&gt;
+          &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Odit doloremque dolorem quam laboriosam saepe tempore deserunt facilis ullam cupiditate voluptatum non temporibus vitae nobis, omnis libero molestias alias ea a.&lt;/p&gt;
+        &lt;/div&gt;
+        // modal 按鈕
+        &lt;div class="modal-footer justify-content-center pt-none"&gt;
+          &lt;button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" data-dismiss="modal"&gt;送出&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <!-- 送審-->
+        <h5 id="modalConfirm" class="text-h5 mb-xs">確認跳窗</h5>
+        <button class="b-btn-default mb-md" data-size="md" data-toggle="modal" data-target="#confirmModal">確認跳窗</button>
+        <div class="modal fade" id="confirmModal" data-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+          role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-img" data-type="success"></div>
+            <div class="modal-content">
+              <div class="modal-body text-center">
+                <h3 class="modal-title">資料已送審</h3>
+                <p class="text-A b-caption">※ 若資料需修改，請於內部進行駁回再進行調整</p>
+              </div>
+              <div class="modal-footer justify-content-center pt-none">
+                <button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button"
+                  data-dismiss="modal">上架其他商品</button>
+                <button class="b-btn-default text w-100 mb-none" data-size="lg" type="button"
+                  data-dismiss="modal">返回</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <pre><code class="html">
+  // modal trigger
+  &lt;button class="b-btn-default" data-size="md" data-toggle="modal" data-target="#confirmModal"&gt;確認跳窗&lt;/button&gt;
+        
+  // modal content
+  &lt;div class="modal fade" id="confirmModal" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"&gt;
+    &lt;div class="modal-dialog modal-sm" role="document"&gt;
+      // modal 狀態(見下表)
+      &lt;div class="modal-img" data-type="success"&gt;&lt;/div&gt;
+      &lt;div class="modal-content"&gt;
+        &lt;div class="modal-body text-center"&gt;
+          // modal 標題
+          &lt;h3 class="modal-title"&gt;資料已送審&lt;/h3&gt;
+          &lt;p class="text-A b-caption"&gt;※ 若資料需修改，請於內部進行駁回再進行調整&lt;/p&gt;
+        &lt;/div&gt;
+        // modal 按鈕
+        &lt;div class="modal-footer justify-content-center pt-none"&gt;
+          &lt;button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" data-dismiss="modal"&gt;上架其他商品&lt;/button&gt;
+          &lt;button class="b-btn-default text w-100 mb-none" data-size="lg" type="button" data-dismiss="modal"&gt;返回&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <table class="element-table table shadow-1 mb-xl" style="width: 600px">
+          <tr>
+            <td>error modal</td>
+            <td>.modal-img[data-type='error']</td>
+          </tr>
+          <tr>
+            <td>success modal</td>
+            <td>.modal-img[data-type='success']</td>
+          </tr>
+          <tr>
+            <td>warning modal</td>
+            <td>.modal-img[data-type='warning']</td>
+          </tr>
+        </table>
+      </div>
+      <!-- navigation -->
+      <h3 id="navigation" class="text-h3 pt-xl">Navigation</h3>
+      <div class="pb-xl">
+        <h5 class="text-h5 pt-sm">top bar</h5>
+        <div class="position-relative pb-xl">
+          <header class="navbar navbar-inverse fixed-top active position-absolute" id="header">
+            <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+              <h1> <a href="./1.0_index.html"><span>IIO</span>營運後台</a></h1>
+            </div>
+            <ul class="topbar-menu">
+              <li><span class="greeting">Have a Good Time</span></li>
+              <li>
+                <div class="btn-group">
+                  <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="dropdown-list">
+                      <li class="dropdown-item"><a class="dropdown-info" href="3.1.1_selling-item.html"><span class="b-caption">[商品審核] [熱門]超可愛小丸子帽子</span></a>
+                        <div class="date"><span>今天</span><span>16:55</span></div>
+                      </li>
+                      <li class="dropdown-item"><a class="dropdown-info" href="2.1.1_asset-detail.html"><span class="b-caption">[資產審核] 小丸子帽子</span></a>
+                        <div class="date"><span>今天</span><span>09:55</span></div>
+                      </li>
+                      <li class="dropdown-item read">
+                        <div class="dropdown-info">
+                          <p class="b-caption">[資產審核] 小丸子鞋子</p>
+                        </div>
+                        <div class="date"><span>8-12</span></div>
+                      </li>
+                      <li class="dropdown-item read">
+                        <div class="dropdown-info">
+                          <p class="b-caption">[資產審核] 小丸子裙子</p>
+                        </div>
+                        <div class="date"><span>8-12</span></div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <div class="btn-group">
+                  <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <ul class="dropdown-list">
+                      <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </header>
+        </div>
+        <pre class="mt-md"><code class="html">
+  &lt;header class="navbar navbar-inverse fixed-top active position-absolute" id="header"&gt;
+    &lt;div class="navbar-brand"&gt;
+      &lt;!-- 開闔左側 menu --&gt;
+      &lt;a id="menu-toggle"&gt;&lt;span class="material-icons"&gt;menu&lt;/span&gt;&lt;/a&gt;
+      &lt;h1&gt; &lt;a href="./1.0_index.html"&gt;&lt;span&gt;IIO&lt;/span&gt;營運後台&lt;/a&gt;&lt;/h1&gt;
+    &lt;/div&gt;
+
+    &lt;ul class="topbar-menu"&gt;
+      &lt;!-- 當初覺得上面太空加的裝飾句 --&gt;
+      &lt;li&gt;&lt;span class="greeting"&gt;Have a Good Time&lt;/span&gt;&lt;/li&gt;
+      &lt;li&gt;
+        &lt;div class="btn-group"&gt;
+          &lt;!-- 下拉清單詳見 Dropdown --&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/header&gt;
+        </code></pre>
+        <h5 class="text-h5 pt-sm">side bar</h5>
+        <p>可直接參考 js/sidebar.js，編輯 menuItem 內容即可新增/調整側邊欄位內容</p>
+      </div>
+      <!-- progress -->
+      <h3 id="progress" class="text-h3 pt-xl">Progress & Step</h3>
+      <div>
+        <h5 class="text-h5 mb-sm">Progress</h5>
+        <p class="mb-sm">改自 bootstrap 4 的 progress</p>
+        <div class="progress b-progress width-150">
+          <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+            :aria-valuenow="fileProgress" aria-valuemin="0" aria-valuemax="100" :style="{width: fileProgress+'%'}">
+          </div>
+        </div>
+        <pre class="mt-sm"><code class="html">
+  &lt;div class="progress b-progress width-150"&gt;
+    &lt;div class="progress-bar progress-bar-striped progress-bar-animated" 
+    role="progressbar" :aria-valuenow="fileProgress" aria-valuemin="0" aria-valuemax="100" :style="{width: fileProgress+'%'}"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <h5 class="text-h5">Steps</h5>
+        <div class="status">
+          <div class="step previous">
+            <span class="step-label">1</span>
+            <span class="step-name">步驟一</span>
+          </div>
+          <div class="step">
+            <span class="step-label">2</span>
+            <span class="step-name">步驟二</span>
+          </div>
+          <div class="step next">
+            <span class="step-label">3</span>
+            <span class="step-name">步驟三</span>
+          </div>
+          <div class="step next">
+            <span class="step-label">4</span>
+            <span class="step-name">步驟四</span>
+          </div>
+        </div>
+        <pre class="mt-sm"><code class="html">
+  &lt;div class="status"&gt; 
+    &lt;div class="step previous"&gt;
+      &lt;span class="step-label"&gt;1&lt;/span&gt;
+      &lt;span class="step-name"&gt;步驟一&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="step"&gt;
+      &lt;span class="step-label"&gt;2&lt;/span&gt;
+      &lt;span class="step-name"&gt;步驟二&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="step next"&gt;
+      &lt;span class="step-label"&gt;3&lt;/span&gt;
+      &lt;span class="step-name"&gt;步驟三&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="step next"&gt;
+      &lt;span class="step-label"&gt;4&lt;/span&gt;
+      &lt;span class="step-name"&gt;步驟四&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <table class="element-table table shadow-1 mb-xl" style="width: 600px">
+          <tr>
+            <td>目前步驟</td>
+            <td>不設定 class</td>
+          </tr>
+          <tr>
+            <td>已完成步驟</td>
+            <td>.previous</td>
+          </tr>
+          <tr>
+            <td>未完成步驟</td>
+            <td>.next</td>
+          </tr>
+        </table>
+      </div>
+      <!-- table -->
+      <h3 id="table" class="text-h3 pt-xl">Table</h3>
+      <div>
+        <div class="b-table-wrap mb-xl">
+          <div class="table-responsive">
+            <table class="table table-hover" id="tableID">
+              <thead>
+                <th>狀態</th>
+                <th>上架顯示名稱</th>
+                <th>價格</th>
+                <th>庫存</th>
+                <th>刊登期間</th>
+                <th>供應商</th>
+                <th>更新時間</th>
+                <th>操作功能</th>
+              </thead>
+              <tbody>
+                <template v-for="item,idx in dataGrid">
+                  <tr>
+                    <td> <span class="b-caption">{{status[item.status].label}}</span></td>
+                    <td>
+                      <div class="d-flex align-items-center"><img class="b-t-img"
+                          src="https://fakeimg.pl/60x40/dddddd/?text=img">
+                        <div class="b-t-info">
+                          <h3 class="b-t-info-title width-200 b-to-e">{{item.name}}</h3>
+                          <div class="d-flex align-items-center"><span
+                              class="b-caption width-150 b-to-e">{{item.id}}</span>
+                            <div class="b-btn-default outline m-none" data-size="xs" :disabled="item.copied === 'show'">
+                              複製ID<span class="copy-alert alert alert-success" :class="item.copied">已複製</span></div>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="t-r"> <span class="b-caption-l">{{item.price}}</span></td>
+                    <td class="t-r"> <span class="b-caption-l">{{item.stock}}</span></td>
+                    <td>
+                      <p class="b-caption-l">{{item.publishStart}}</p>
+                      <p class="b-caption-l">{{item.publishEnd}}</p>
+                    </td>
+                    <td> <span class="b-caption-l">{{item.cp}}</span></td>
+                    <td> <span class="b-caption-l">{{item.update_time}}</span></td>
+                    <td>
+                      <a class="b-btn-default text m-none px-xs" data-size="sm">查看 </a>
+                      <a class="b-btn-default text m-none px-xs" data-size="sm">編輯 </a>
+                      <button class="b-btn-default text m-none px-xs" data-size="sm" data-toggle="modal"
+                        data-target="#deleteConfirm">刪除 </button>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p>使用 html 模板</p>
+        <pre><code class="html">
+  &lt;div class="b-table-wrap"&gt;
+    &lt;div class="table-responsive"&gt;
+      &lt;table class="table table-hover" id="tableID"&gt;
+        &lt;thead&gt;
+          &lt;th&gt;狀態&lt;/th&gt;
+          &lt;th&gt;上架顯示名稱&lt;/th&gt;
+          &lt;th&gt;價格&lt;/th&gt;
+          &lt;th&gt;庫存&lt;/th&gt;
+          &lt;th&gt;刊登期間&lt;/th&gt;
+          &lt;th&gt;供應商&lt;/th&gt;
+          &lt;th&gt;更新時間&lt;/th&gt;
+          &lt;th&gt;操作功能&lt;/th&gt;
+        &lt;/thead&gt;
+        &lt;tbody&gt;
+          &lt;template v-for="item,idx in dataGrid"&gt; // 放表格 html 的模板
+            &lt;tr&gt;
+              &lt;td&gt; &lt;span class="b-caption"&gt;{ {status[item.status].label}}&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;
+                &lt;div class="d-flex align-items-center"&gt;&lt;img class="b-t-img"
+                    src="https://fakeimg.pl/60x40/dddddd/?text=img"&gt;
+                  &lt;div class="b-t-info"&gt;
+                    &lt;h3 class="b-t-info-title width-200 b-to-e"&gt;{ {item.name}}&lt;/h3&gt;
+                    &lt;div class="d-flex align-items-center"&gt;&lt;span
+                        class="b-caption width-150 b-to-e"&gt;{ {item.id}}&lt;/span&gt;
+                      &lt;div class="b-btn-default outline m-none" data-size="xs" :disabled="item.copied === 'show'"&gt;
+                        複製ID&lt;span class="copy-alert alert alert-success" :class="item.copied"&gt;已複製&lt;/span&gt;&lt;/div&gt;
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/td&gt;
+              &lt;td class="t-r"&gt; &lt;span class="b-caption-l"&gt;{ {item.price}}&lt;/span&gt;&lt;/td&gt;
+              &lt;td class="t-r"&gt; &lt;span class="b-caption-l"&gt;{ {item.stock}}&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;
+                &lt;p class="b-caption-l"&gt;{ {item.publishStart}}&lt;/p&gt;
+                &lt;p class="b-caption-l"&gt;{ {item.publishEnd}}&lt;/p&gt;
+              &lt;/td&gt;
+              &lt;td&gt; &lt;span class="b-caption-l"&gt;{ {item.cp}}&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt; &lt;span class="b-caption-l"&gt;{ {item.update_time}}&lt;/span&gt;&lt;/td&gt;
+              &lt;td&gt;
+                &lt;a class="b-btn-default text m-none px-xs" data-size="sm"&gt;查看 &lt;/a&gt;
+                &lt;a class="b-btn-default text m-none px-xs" data-size="sm"&gt;編輯 &lt;/a&gt;
+                &lt;button class="b-btn-default text m-none px-xs" data-size="sm" data-toggle="modal"
+                  data-target="#deleteConfirm"&gt;刪除 &lt;/button&gt;
+              &lt;/td&gt;
+            &lt;/tr&gt;
+          &lt;/template&gt;
+        &lt;/tbody&gt;
+      &lt;/table&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+        </code></pre>
+        <p>使用 DataTables 套件(RD 推薦使用)，目前切版用到的 js 設定如下。</p>
+        <pre><code class="JavaScript">
+  $('#tableID').DataTable({
+    "pagingType": "full_numbers",
+    "language": {  // 中文介面的字詞設定
+      "decimal": "",
+      "emptyTable": "沒有可顯示的資料",
+      "info": "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+      "infoEmpty": "顯示從 0 到 0 共 0 筆資料",
+      "infoFiltered": "(從 _MAX_ 筆篩選出)",
+      "infoPostFix": "",
+      "thousands": ",",
+      "lengthMenu": "顯示 _MENU_ 筆資料",
+      "loadingRecords": "載入中...",
+      "processing": "執行中...",
+      "search": "篩選資料: ",
+      "zeroRecords": "查無符合資料",
+      "paginate": {
+        "first": "第一筆",
+        "last": "最後一筆",
+        "next": "下一筆",
+        "previous": "上一筆"
+      },
+      "aria": {
+        "sortAscending": ": activate to sort column ascending",
+        "sortDescending": ": activate to sort column descending"
+      }
+    },
+    "order": [[0, "asc"]], // 預設表格排序
+    scrollY: '25rem', // 產生卷軸的高度
+    scrollX: true,
+    searching: false, // 關閉搜尋
+    scrollCollapse: true, 
+    fixedColumns: { // 固定的欄位
+      left: 0, // 預設會是 1，設定 0 來取消左方欄位固定
+      right: 1
+    }
+  });
+        </code></pre>
+        <p class="caption">更多關於 DataTables 的說明 <a class="link-primary" href="https://datatables.net/reference/option/"
+            target="_blank">請見此處</a>。</p>
+      </div>
+      <!-- tab -->
+      <h3 id="tab" class="text-h3 pt-xl">Tab</h3>
+      <div>
+        <ul class="b-tabs">
+          <li class="b-tab-item">
+            <a class="b-tab-link" :class="currentTab == 'tab1'? 'active': ''" @click="currentTab = 'tab1'">tab1</a>
+          </li>
+          <li class="b-tab-item">
+            <a class="b-tab-link" :class="currentTab == 'tab2'? 'active': ''" @click="currentTab = 'tab2'">tab2</a>
+          </li>
+        </ul>
+        <div class="bg-white p-xl shadow-1" v-show="currentTab == 'tab1'">
+          <p>tab1 的內容</p>
+        </div>
+        <div class="bg-white p-xl shadow-1" v-show="currentTab == 'tab2'">
+          <p>tab2 的內容</p>
+        </div>
+        <pre class="mt-md"><code class="html">
+  &lt;ul class="b-tabs"&gt;
+    &lt;li class="b-tab-item"&gt;
+      &lt;a class="b-tab-link" class="currentTab == 'tab1'? 'active': ''" @click="currentTab = 'tab1'"&gt;tab1&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li class="b-tab-item"&gt;
+      &lt;a class="b-tab-link" :class="currentTab == 'tab2'? 'active': ''" @click="currentTab = 'tab2'"&gt;tab2&lt;/a&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;div class="bg-white p-xl shadow-1" v-show="currentTab == 'tab1'"&gt;
+    &lt;p&gt;tab1 的內容&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="bg-white p-xl shadow-1" v-show="currentTab == 'tab2'"&gt;
+    &lt;p&gt;tab2 的內容&lt;/p&gt;
+  &lt;/div&gt;
+        </code></pre>
+      </div>
+      <!-- tooltip -->
+      <h3 id="tooltip" class="text-h3 pt-xl">Tooltip</h3>
+      <div>
+        <p>bootstrap tooltip 要引入的東西有點多。</p>
+        <label>滑鼠請 hover →<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="備註內容"><span
+          class="material-icons">info</span></span></label>
+        <pre class="mt-md"><code class="jd">
+  &lt;span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="備註內容"&gt;
+    &lt;span class="material-icons"&gt;info&lt;/span&gt;
+  &lt;/span&gt;
+  ...
+  // 除了 bootstrap 之外還需要引入 popper.js
+  &lt;script src="js/popper.min.js"&gt;&lt;/script&gt;
+  // 另外需要初始化
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+  })
+        </code></pre>
+        <label>插入 html or 圖片的寫法，滑鼠請 hover →
+          <span class="tooltip-btn pl-xs"  data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack">
+            <span class="material-icons">info</span>
+          </span>
+        </label>
+        <p>設定 [data-html="true"] 屬性，就可以在 title 中塞入 html tag</p>
+        <pre class="mt-md"><code class="jd">
+  &lt;span class="tooltip-btn pl-xs"  data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack"&gt;
+    &lt;span class="material-icons"&gt;info&lt;/span&gt;
+  &lt;/span&gt;
+  ...
+  // 除了 bootstrap 之外還需要引入 popper.js
+  &lt;script src="js/popper.min.js"&gt;&lt;/script&gt;
+  // 另外需要初始化
+  $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+  })
+  var vm = new Vue({
+    el: '#app',
+    data() {
+      return {
+        previewBackpack: `
+          &lt;p>資產在背包內呈現所使用的圖片&lt;/p&gt;
+          &lt;p&gt;圖片安全範圍示意&lt;/p&gt;
+          &lt;img class='w-100' src='./img/demo/safe.png', alt=''/&gt;
+          &lt;p&gt;背包資產細節&lt;/p&gt;
+          &lt;img class='w-100' src='./img/demo/backpack-list.png', alt=''/&gt;
+          &lt;img class='w-100' src='./img/demo/backpack-detail.png', alt=''/&gt;
+        `,
+      }
+    }
+  })
+        </code></pre>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <script src="js/vue-select.js"></script>
+    <script src="js/custom.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+    <script>
+      Vue.component('v-select', VueSelect.VueSelect)
+      var jQfn = function () {
+        flatpickr('#date', {
+          static: true,
+          dateFormat: "Y/m/d",
+          minDate: new Date().fp_incr(5),
+        })
+        flatpickr('#time', {
+          enableTime: true,
+          enableSecond: true,
+          noCalendar: true,
+          dateFormat: "H:i",
+          time_24hr: true
+        })
+        $("#main-content").on("change", "#previewImg2", function (e){
+            let file = e.target.files;
+            vm.previewImg2.name = file[0].name
+            vm.previewImg2.size = size_format_float(file[0].size / 1024, 2);
+            vm.previewImg2.src = URL.createObjectURL(file[0]);
+        })
+      }
+      var vm = new Vue({
+        el: '#app',
+        data() {
+          return {
+            previewBackpack: `
+              <p>資產在背包內呈現所使用的圖片</p>
+              <p>圖片安全範圍示意</p>
+              <img class='w-100' src='./img/demo/safe.png', alt=''/>
+              <p>背包資產細節</p>
+              <img class='w-100' src='./img/demo/backpack-list.png', alt=''/>
+              <img class='w-100' src='./img/demo/backpack-detail.png', alt=''/>
+            `,
+            currentTab: 'tab1',
+            fileProgress: 45,
+            currentPage: 'color',
+            status: [
+              { label: '草稿', markColor: 'draft' },
+              { label: '平台審核中', markColor: 'info' },
+              { label: '未通過', markColor: 'warning' },
+              { label: '審核通過', markColor: 'success' },
+              { label: '內部審核中', markColor: 'info' },
+            ],
+            menus: [
+              { name: 'Color', id: 'color' },
+              { name: 'Alert', id: 'alert' },
+              { name: 'Badge', id: 'badge' },
+              { name: 'Button', id: 'button' },
+              { name: 'Dropdown', id: 'dropdown' },
+              {
+                name: 'Form', id: 'form', submenuExpand: false,
+                option: [
+                  { name: 'text input', id: 'text' },
+                  { name: 'textarea', id: 'textarea' },
+                  { name: 'radio', id: 'radio' },
+                  { name: 'checkbox', id: 'checkbox' },
+                  { name: 'select', id: 'select' },
+                  { name: 'datepicker', id: 'datepicker' },
+                  { name: 'upload', id: 'upload' },
+                  { name: 'status', id: 'status' },
+                ]
+              },
+              {
+                name: 'Modal', id: 'modal', submenuExpand: false,
+                option: [
+                  { name: 'default', id: 'modalDefault' },
+                  { name: 'confirm', id: 'modalConfirm' },
+                ]
+              },
+              { name: 'Navigation', id: 'navigation' },
+              { name: 'Progress', id: 'progress' },
+              { name: 'Table', id: 'table' },
+              { name: 'Tab', id: 'tab' },
+              { name: 'Tooltip', id: 'tooltip' },
+            ],
+            value: '',
+            colors: [
+              { name: '$Primary', color: '#e5006d' },
+              { name: '$DarkPrimary', color: '#c0105f' },
+              { name: '$Secondary', color: '#322741' },
+              { name: '$DarkSecondary', color: '#2e281a' },
+              { name: '$contrast', color: '#6D03E5' },
+              { name: '$danger', color: '#ff303e' },
+              { name: '$success', color: '#7DDB2B' },
+              { name: '$warning', color: '#ffc107' },
+              { name: '$info', color: '#00AEFF' },
+              { name: '$text-AAAA', color: '#494949' },
+              { name: '$text-AAA', color: '#545454' },
+              { name: '$text-AA', color: '#727272' },
+              { name: '$text-A', color: '#919191' },
+              { name: '$label-color', color: '#8988a7' },
+              { name: '$placeholder', color: '#A2A2A2' },
+            ],
+            form: {
+              input: '',
+              textarea: '',
+              select: {
+                value: '',
+                option: [
+                  { value: 'select1', label: '選項一' },
+                  { value: 'select2', label: '選項二' },
+                  { value: 'select3', label: '選項三' },
+                ]
+              }
+            },
+            previewImg:{
+                value: '',
+                name: '',
+                alert: '',
+                validation: true,
+            },
+            previewImg2:{
+                value: '',
+                name: '',
+                src: '',
+                alert: '',
+                validation: true,
+            },
+            dataGrid: [
+              {
+                id: 'c2a98d80-9963-4640-862e-442ad15f2b3c',
+                name: '[熱門] 經典特色小丸子帽子',
+                price: '1,500',
+                stock: 10,
+                publishStart: '2021/12/23 23:59',
+                publishEnd: '2021/12/25 23:59',
+                copied: '',
+                status: 4,
+                cp: 'OX供應商',
+                update_time: '2021/8/9 19:00',
+              },
+            ],
+          }
+        },
+        mounted: function () {
+          this.$nextTick(function () {
+            hljs.initHighlightingOnLoad();
+            jQfn();
+          })
+        },
+        methods: {
+          backpackImgPreview: function(e) {
+            const file = e.target.files[0];
+            this.previewImg.name = file.name;
+            if( file.size / 1024 < 80) {
+              this.previewImg.value = URL.createObjectURL(file);
+              this.previewImg.size = (file.size / 1024).toFixed(2);
+              this.previewImg.alert = ''
+            } else {
+              this.previewImg.value = '';
+              this.previewImg.size = '';
+              this.previewImg.alert = '檔案尺寸過大'
+            }
+          },
+        },
+        updated: function () {
+          this.$nextTick(function () {
+            jQfn()
+          })
+        }
+      })
+      $(document).ready(function () {
+        $('#tableID').DataTable({
+          "pagingType": "full_numbers",
+          "language": {
+            "decimal": "",
+            "emptyTable": "沒有可顯示的資料",
+            "info": "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+            "infoEmpty": "顯示從 0 到 0 共 0 筆資料",
+            "infoFiltered": "(從 _MAX_ 筆篩選出)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "顯示 _MENU_ 筆資料",
+            "loadingRecords": "載入中...",
+            "processing": "執行中...",
+            "search": "篩選資料: ",
+            "zeroRecords": "查無符合資料",
+            "paginate": {
+              "first": "第一筆",
+              "last": "最後一筆",
+              "next": "下一筆",
+              "previous": "上一筆"
+            },
+            "aria": {
+              "sortAscending": ": activate to sort column ascending",
+              "sortDescending": ": activate to sort column descending"
+            }
+          },
+          "order": [[0, "asc"]],
+          scrollY: '25rem',
+          scrollX: true,
+          searching: false,
+          scrollCollapse: true,
+          fixedColumns: {
+            left: 0,
+            right: 1
+          }
+        });
+
+      });
+    </script>
+</body>
+
+</html>

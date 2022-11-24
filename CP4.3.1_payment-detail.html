@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>營收資訊</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>訂單管理>營收資訊
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <div class="form-top pb-none pt-xs px-xs">
+                <h2 class="text-h3">11 月訂單報表
+                </h2>
+              </div>
+              <div class="indicator-wrap">
+                <div class="indicator">
+                  <label>本月營收</label>
+                  <div class="indicator-item">417,100<span>元</span></div>
+                  <p class="b-caption text-danger">+100 (+10%)</p>
+                </div>
+                <div class="indicator">
+                  <label>本月成交訂單</label>
+                  <div class="indicator-item">430<span>筆</span></div>
+                  <p class="b-caption text-success">+100 (+10%)</p>
+                </div>
+              </div>
+              <div class="d-flex align-items-center justify-content-between px-lg pb-md">
+                <p class="b-caption">撥款日期: 2021/08/15</p>
+                <button class="b-btn-default outline" id="downloadFileType" data-size="sm" dropdown-toggle data-toggle="dropdown" aria-expanded="false" data-offset="0,5">下載訂單詳情</button>
+                <div class="dropdown-menu b-dropdown-menu" aria-labelledby="downloadFileType"><a class="dropdown-item" href="">pdf</a><a class="dropdown-item" href="">.csv</a></div>
+              </div>
+              <div class="pr-md">
+                <div class="b-table-wrap">
+                  <div class="table-responsive pb-md">
+                    <table class="table table-hover" id="orderDetail">
+                      <thead>
+                        <th>日期</th>
+                        <th>訂單編號</th>
+                        <th class="t-r">售出金額(TWD)</th>
+                        <th>收入類別</th>
+                        <th>PA 方案</th>
+                        <th class="t-r">PA 手續費(TWD)</th>
+                        <th class="t-r">平台服務費(TWD)</th>
+                        <th class="t-r pr-xl">撥款金額(TWD)</th>
+                      </thead>
+                      <tbody> 
+                        <tr v-for="item in dataGrid">
+                          <td><span>{{ item.date }}</span></td>
+                          <td><span>{{ item.orderId }}</span></td>
+                          <td class="t-r"> <span>{{ item.orderPrice.toLocaleString('en-US') }}</span></td>
+                          <td> <span>B2C </span></td>
+                          <td> <span>GAMA PAY</span></td>
+                          <td class="t-r"> <span>{{ Math.ceil(item.orderPrice * paTax).toLocaleString('en-US') }}</span></td>
+                          <td class="t-r"> <span>{{ Math.ceil(item.orderPrice * platTax).toLocaleString('en-US') }}</span></td>
+                          <td class="t-r pr-xl"> <span>{{ (item.orderPrice - Math.ceil(item.orderPrice * platTax) - Math.ceil(item.orderPrice * paTax)).toLocaleString('en-US') }}</span></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex justify-content-center"><a class="b-btn-secondary text mt-lg" data-size="md" href="CP4.1_order-report.html"><i class="fa fa-arrow-circle-left"> </i>返回營收資訊</a></div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <script src="js/vue-select.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('營收資訊');
+      
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              platTax: .05,
+              paTax: .03,
+              dataGrid: [
+                  {
+                      date: '2021/11/1',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 500,
+                  },{
+                      date: '2021/11/7',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 550,
+                  },{
+                      date: '2021/11/14',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 5400,
+                  },{
+                      date: '2021/11/21',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 1500,
+                  }, {
+                      date: '2021/11/28',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 830,
+                  },{
+                      date: '2021/11/1',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 500,
+                  },{
+                      date: '2021/11/7',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 550,
+                  },{
+                      date: '2021/11/14',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 5400,
+                  },{
+                      date: '2021/11/21',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 1500,
+                  }, {
+                      date: '2021/11/28',
+                      orderId: '0545425as43da5s4d313',
+                      orderPrice: 830,
+                  },
+              ],
+              sum: {
+                  totalOrder: 0,
+                  totalSales: 0,
+                  totalTax: 0,
+                  totalPa: 0,
+                  totalIncome: 0,
+              }
+          }, 
+          methods: {
+              total() {
+                  let arr = this.dataGrid
+                  var reducePlus = arr.reduce(function(init,current,currentIndex){
+                      vm.sum.totalOrder += current.orderNum
+                      vm.sum.totalSales += current.orderPrice
+                      vm.sum.totalTax += current.orderPrice * vm.platTax
+                      vm.sum.totalPa += current.orderPrice * vm.paTax
+                      vm.sum.totalIncome = vm.sum.totalSales - vm.sum.totalTax - vm.sum.totalPa
+                      //- console.log(vm.sum.totalOrder)
+                      //- return Math.max( init, init.date ); // 與前一個值比較哪個大
+                  }, 0);
+              },
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  vm.total()
+              })
+          },
+      })
+      
+      $(document).ready(function() {
+          $('#orderDetail').DataTable({
+              "columnDefs": [{ targets: 'no-sort', orderable: false }],
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              "searching":   false,
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+              fixedColumns:   {
+                  left: 0,
+                  right: 1
+              }
+          });
+      
+      } );
+    </script>
+  </body>
+</html>

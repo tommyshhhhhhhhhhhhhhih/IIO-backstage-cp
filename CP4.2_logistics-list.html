@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>實體訂單一覽</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap animated fadeIn" id="app">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"> 廠商後台>實體訂單一覽
+              </div>
+              <div class="title-wrap">
+                <div class="info">
+                  <h2 class="text-h2">實體訂單一覽
+                  </h2>
+                </div>
+                <div class="toolbar"> 
+                </div>
+                <div class="b-caption w-100">
+                  <p>成立訂單一覽</p>
+                </div>
+              </div>
+              <div class="b-search-group">
+                    <div class="b-text-field">
+                      <label>訂單編號
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label>商品ID
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-text-field">
+                  <label>訂單成立時間</label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <input class="b-input mr-xs" id="dateRangeStart" type="text" placeholder="開始搜尋時間"><span class="text-A pt-xs">~</span>
+                      <input class="b-input mx-xs" id="dateRangeEnd" type="text" placeholder="結束搜尋時間">
+                    </div>
+                  </div>
+                </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">訂單狀態
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="訂單狀態" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="待出貨" name="訂單狀態" value="待出貨">
+                            <label for="待出貨">待出貨</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="已出貨" name="訂單狀態" value="已出貨">
+                            <label for="已出貨">已出貨</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-search-buttons">
+                      <button class="b-btn-default ladda-button" data-size="md" data-style="slide-left" type="button"><span class="ladda-label"><i class="fa fa-search"></i>查詢</span><span class="ladda-spinner"></span>
+                        <div class="ladda-progress" style="width:0"></div>
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="content">
+              <div class="b-table-wrap">
+                <div class="p-md d-flex justify-content-end" style="margin-bottom: -4.5rem;">
+                  <label class="b-btn-primary outline position-relative" for="import" data-size="md" style="z-index:1">匯入
+                    <input type="file" id="import" accept=".csv" multiple="multiple">
+                  </label>
+                  <button class="b-btn-primary outline position-relative" data-size="md" style="z-index:1">匯出</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover" id="payoutPeport" style="width:100%">
+                    <thead>
+                      <th>訂單編號</th>
+                      <th>訂單成立時間</th>
+                      <th>訂購商品</th>
+                      <th>出貨狀態</th>
+                      <th>收件資訊</th>
+                      <th>操作</th>
+                    </thead>
+                    <tbody>
+                      <template> 
+                        <tr v-for="item,idx in dataGrid">
+                          <td> 
+                            <p>{{item.date}}</p>
+                          </td>
+                          <td> 
+                            <p>{{ item.time }}</p><span class="b-caption">{{ item.time }} 付款成功</span>
+                          </td>
+                          <td> 
+                            <p>{{ item.name }} </p>
+                          </td>
+                          <td> 
+                            <template v-if="item.sent === 1" key="productSent"> 
+                              <p>新竹物流</p>
+                              <p class="b-caption">物流編號：{{ 131235535315+idx }}</p>
+                            </template>
+                            <template v-if="item.sent === 2" key="productNotSent"> <span class="badge-info">待出貨</span></template>
+                          </td>
+                          <td> <span class="d-inline-block mr-sm">王大明</span><span>0912345678</span>
+                            <p class="b-caption">114台北市內湖區瑞湖街111號</p>
+                          </td>
+                          <td><a class="b-btn-default text m-none px-xs" data-size="sm" href="CP4.2.1_logistics-detail.html">查看詳情 </a></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vue-->
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- table plugin-->
+    <script src="js/datatables.min.js"></script>
+    <!-- input plugin-->
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+       currentPage('物流訂單一覽');
+      
+       var vm = new Vue({
+           el: '#app',
+           data: {
+               dataGrid: [
+                   {
+                       date: 'OD202202220001',
+                       time: '2022/2/22 16:18',
+                       type: '虛擬',
+                       name: '超厲害虛擬道具',
+                       sent: 1,
+                       status: '尚未撥款'
+                   },{
+                       date: 'OD202202220002',
+                       time: '2022/2/22 16:19',
+                       type: '實體',
+                       name: '超厲害道具公仔',
+                       sent: 2,
+                       status: '尚未撥款'
+                   },{
+                       date: 'OD202202220003',
+                       time: '2022/2/22 16:20',
+                       type: '虛擬',
+                       name: '超厲害虛擬道具',
+                       sent: 1,
+                       status: '尚未撥款'
+                   }
+               ],
+               game: [
+                   {value: 'game1', label: '遊戲一'},
+                   {value: 'game2', label: '遊戲二'},
+                   {value: 'game3', label: '遊戲三'},
+               ],
+               c2c: [
+                   { value: '85%'}
+               ],
+           }
+       })
+      $(document).ready(function() {
+           $("#dateRangeStart").flatpickr({
+               static: true,
+               enableTime: true,
+               enableSeconds: true,
+               dateFormat: "Y/m/d H:i:ss",
+           });
+           $("#dateRangeEnd").flatpickr({
+               static: true,
+               enableTime: true,
+               enableSeconds: true,
+               dateFormat: "Y/m/d H:i:ss",
+           });
+      
+           $('#payoutPeport').DataTable({
+               "pagingType": "full_numbers",
+               "language": {
+                   "decimal":        "",
+                   "emptyTable":     "沒有可顯示的資料",
+                   "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                   "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                   "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                   "infoPostFix":    "",
+                   "thousands":      ",",
+                   "lengthMenu":     "顯示 _MENU_ 筆資料",
+                   "loadingRecords": "載入中...",
+                   "processing":     "執行中...",
+                   "search":         "篩選資料: ",
+                   "zeroRecords":    "查無符合資料",
+                   "paginate": {
+                       "first":      "第一筆",
+                       "last":       "最後一筆",
+                       "next":       "下一筆",
+                       "previous":   "上一筆"
+                   },
+                   "aria": {
+                       "sortAscending":  ": activate to sort column ascending",
+                       "sortDescending": ": activate to sort column descending"
+                   }
+               },
+               "order": [[ 0, "asc" ]],
+               scrollY:        '25rem',
+               scrollX:        true,
+               searching:      false,
+               scrollCollapse: true,
+               fixedColumns:   {
+                   right: 1
+               }
+           });
+      
+       } );
+    </script>
+  </body>
+</html>

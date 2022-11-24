@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>上架審核</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap animated fadeIn" id="app">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"> 廠商後台>商品上架管理>上架審核
+              </div>
+              <div class="title-wrap">
+                <div class="info">
+                  <h2 class="text-h2">上架審核
+                  </h2>
+                </div>
+                <div class="toolbar"> 
+                </div>
+                <div class="b-caption w-100">上架資料內部審核，通過後送出至平台審核
+                </div>
+              </div>
+              <div class="b-search-group">
+                    <div class="b-text-field">
+                      <label>物件ID
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label>商品名稱
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">狀態
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="狀態" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="待審核" name="狀態" value="待審核">
+                            <label for="待審核">待審核</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="駁回" name="狀態" value="駁回">
+                            <label for="駁回">駁回</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="通過" name="狀態" value="通過">
+                            <label for="通過">通過</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-search-buttons">
+                      <button class="b-btn-default ladda-button" data-size="md" data-style="slide-left" type="button"><span class="ladda-label"><i class="fa fa-search"></i>查詢</span><span class="ladda-spinner"></span>
+                        <div class="ladda-progress" style="width:0"></div>
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="content">
+              <div class="b-table-wrap">
+                <div class="p-sm">
+                  <button class="b-btn-primary outline mb-none" data-size="md" data-toggle="modal" data-target="#batch">批次審核</button>
+                </div>
+                <div class="table-responsive">
+                  <table class="table table-hover" id="productList">
+                    <thead> 
+                          <th>狀態</th>
+                          <th>上架資訊</th>
+                          <th>送審者</th>
+                          <th>送審時間</th>
+                          <th>操作功能</th>
+                    </thead>
+                    <tbody>
+                      <template> 
+                        <tr v-for="item,idx in dataGrid">
+                          <td> <span :class="'badge-' + status[item.status].markColor" v-if="!item.status">{{status[item.status].label}}</span><span class="b-caption" v-else>{{status[item.status].label}}</span></td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="b-t-info">
+                                <h3 class="b-t-info-title width-200 b-to-e">{{item.name}}</h3>
+                                <div class="d-flex align-items-center"><span class="b-caption">{{item.id}}</span></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td> <span class="b-caption-l">{{item.update_time}}</span></td>
+                          <td> <span class="b-caption-l">{{item.update_user}}</span></td>
+                          <td>
+                            <button class="b-btn-primary text m-none px-xs" data-size="sm" v-if="!item.status" @click="window.location= './CP3.2.1_selling-item-review.html'">審核</button>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- 批次審核-->
+              <div class="modal fade" id="batch" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="modal-body p-none">
+                      <div class="d-flex justify-content-between align-items-center px-lg pt-md">
+                        <h3 class="modal-title">批次審核</h3>
+                      </div>
+                      <div class="table-responsive" style="max-height: 20rem">
+                        <table class="table table-hover" id="productList">
+                          <thead> 
+                            <tr>
+                              <th class="no-sort"> 
+                                <div class="b-checkbox m-none">
+                                  <input type="checkbox" id="selectAll" data-select="all" v-model="selectedAll" @change="changeSelectConfirm">
+                                  <label class="pr-xs" for="selectAll"> </label>
+                                </div>
+                              </th>
+                              <th>狀態</th>
+                              <th>註冊資產</th>
+                              <th>送審時間</th>
+                              <th>送審者</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <template v-for="item,idx in dataGrid">
+                              <tr v-if="!item.status">
+                                <td>
+                                  <div class="b-checkbox m-none">
+                                    <input type="checkbox" :id="'batch'+idx" data-select="item" v-model="item.selected" @change="changeSelectConfirm">
+                                    <label class="pr-xs" :for="'batch'+idx"> </label>
+                                  </div>
+                                </td>
+                                <td> <span :class="'badge-' + status[item.status].markColor">{{status[item.status].label}}</span></td>
+                                <td>
+                                  <div class="d-flex align-items-center">
+                                    <div class="b-t-info">
+                                      <h3 class="b-t-info-title width-200 b-to-e">{{item.name}}</h3>
+                                      <div class="d-flex align-items-center"><span class="b-caption">{{item.id}}</span></div>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td> <span class="b-caption-l">{{item.update_time}}</span></td>
+                                <td> <span class="b-caption-l">{{item.update_user}}</span></td>
+                              </tr>
+                            </template>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="d-flex justify-content-center align-items-center py-md"> <span class="text-A">已選擇 {{ selectItemConfirm }} 筆</span>
+                        <button class="b-btn-success mr-none" data-size="md" :data-loading="btnStatus.success" @click="batchResultSent(2)">批次成功</button>
+                        <button class="b-btn-danger" data-size="md" :data-loading="btnStatus.fail" @click="batchResultSent(1)">批次失敗</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 送出-->
+              <div class="modal fade" id="sent" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">審核結果已送出</h3>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" data-dismiss="modal">關閉</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vue-->
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- table plugin-->
+    <script src="js/datatables.min.js"></script>
+    <!-- input plugin-->
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('上架審核');
+      
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              searchCp:'',
+              loading: false,
+              replenishmentLabel: '',
+              uploadPinCount: 0,
+              fileinput:'',
+              fileName:'',
+              category: {
+                  value:'道具',
+                  option: [
+                      {value: 'item', label: '道具'},
+                      {value: 'ticket', label: '票券'},
+                      {value: 'collection', label: '其他'}
+                  ]
+              },
+              subCategory: {
+                  value:'全部',
+                  option: [
+                      {value: 'all', label: '全部'},
+                      {value: 'maruko', label: '小丸子'},
+                      {value: 'game2', label: '遊戲二'},
+                      {value: 'game3', label: '遊戲三'}
+                  ]
+              },
+              status: [
+                  {label: '待審核', markColor: 'info'},
+                  {label: '駁回', markColor: 'draft'},
+                  {label: '通過', markColor: 'success'},
+              ],
+              dataGrid: [
+                  {
+                      id:'c2a98d80-9963-4640-862e-442ad15f2b3c',
+                      name: '[熱門] 經典特色小丸子帽子',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 1,
+                      cp: 'OX供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 19:00',
+                  },
+                  {
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '[熱門] 經典特色小丸子裙子',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 15:10',
+                  },
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 16:00',
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 0,
+                      cp: 'OO供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 13:00',
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 0,
+                      cp: 'XX供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 13:00',
+                  },
+                  {
+                      id:"2250f36f-723d-42d3-8506-fda907c8f292",
+                      name: '[熱門] 經典特色小丸子鉛筆盒',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 0,
+                      cp: 'OO供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 13:00',
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      selected: false,
+                      status: 0,
+                      cp: 'OO供應商',
+                      update_user: 'OOO',
+                      update_time: '2021/8/9 13:00',
+                  }
+              ],
+              selectItemConfirm: 0,
+              btnStatus: {
+                  success: false,
+                  fail: false,
+              },
+              selectedAll: false,
+          },
+          watch: {
+              selectedAll: function(){
+                  let isSelectAll = this.selectedAll
+                  let row = 0
+                  if (isSelectAll){
+                      this.dataGrid.forEach(function(item, index, array){
+                          if(!item.status) {
+                              item.selected = isSelectAll;   
+                              row ++      
+                          }
+                      });
+                      isSelectAll? this.selectItemConfirm = row: this.selectItemConfirm = 0
+                  }
+              },
+          },
+          methods: {
+              changeSelectConfirm(e) {
+                  let type = e.target.dataset.select
+                  if (type === 'item'){
+                      if(e.target.checked) {
+                          this.selectItemConfirm ++ 
+                      } else {
+                          this.selectItemConfirm --
+                      }
+                      let row = 0
+                      let selected= 0
+                      this.dataGrid.forEach(function(item, index, array){
+                          if(!item.status) {
+                              item.selected ? selected++: ""    
+                              row ++      
+                          }
+                      });
+                      if(row) {
+                          row === selected? this.selectedAll = true: this.selectedAll = false
+                      }
+                  }
+                  if (type === 'all') {
+                      let isSelectAll = this.selectAllConfirm
+                      let row = 0
+                      this.dataGrid.forEach(function(item, index, array){
+                          if(item.status === 1) {
+                              item.selected = isSelectAll;   
+                              row ++      
+                          }
+                      });
+                      isSelectAll? this.selectItemConfirm = row: this.selectItemConfirm=0
+                  }
+                  
+              },
+              batchResultSent(result) {
+                  if (result === 1 ){
+                      this.btnStatus.fail = true
+                  } else {
+                      this.btnStatus.success = true
+                  }
+                  
+                  window.setTimeout(function(){
+                      vm.btnStatus.success = false
+                      vm.btnStatus.fail = false
+      
+                      vm.dataGrid.forEach(function(item, index, array){
+                          if(item.selected) {
+                              item.status = result      
+                              item.selected = false;  
+                          }
+                      });
+      
+                      $('#sent').modal('show');
+                  }, 1000);
+              },
+          },
+          mounted: function () {
+          }
+      })
+      $(document).ready(function() {
+          $('#productList').DataTable({
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+              fixedColumns:   {
+                  left: 0,
+                  right: 1
+              }
+          });
+      
+      } );
+    </script>
+  </body>
+</html>

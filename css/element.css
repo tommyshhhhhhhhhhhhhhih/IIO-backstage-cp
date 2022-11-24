@@ -1,0 +1,209 @@
+* {
+  scroll-behavior: smooth;
+}
+
+.element-menu, .element-content {
+  height: 100vh;
+  overflow: auto;
+}
+
+.element-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 1rem 1rem 1rem 0;
+  border-right: 1px solid #e0e0e0;
+  min-width: 16rem;
+}
+.element-menu .menu-title {
+  padding: 1rem;
+}
+.element-menu li {
+  display: block;
+  padding: 0.3rem 0;
+}
+.element-menu > ul {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  padding-bottom: 3rem;
+}
+.element-menu > ul > li {
+  text-indent: 0.5rem;
+  padding: 0 0 0 1rem;
+}
+.element-menu > ul > li a {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0.5rem;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+.element-menu > ul > li:not([class*=group]):hover {
+  background: rgba(125, 125, 125, 0.05);
+  border-radius: 0 2rem 2rem 0;
+}
+.element-menu > ul > li[data-active=true] {
+  background: rgba(125, 125, 125, 0.05);
+  border-radius: 0 2rem 2rem 0;
+}
+.element-menu > ul > li[data-active=true] .element-menu-item {
+  color: #333;
+  font-weight: bold;
+}
+.element-menu .group {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.element-menu .group .d-flex {
+  margin-left: -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.element-menu .group .d-flex:hover {
+  background: rgba(125, 125, 125, 0.05);
+  border-radius: 0 2rem 2rem 0;
+}
+.element-menu .arrow {
+  width: 1.5rem;
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding-right: 0;
+  opacity: 0.6;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  -webkit-transform: rotate(-90deg) scale(1.2);
+          transform: rotate(-90deg) scale(1.2);
+}
+.element-menu .arrow:hover {
+  opacity: 1;
+}
+.element-menu .arrow[data-expand=true] {
+  -webkit-transform: rotate(0deg) scale(1.2);
+          transform: rotate(0deg) scale(1.2);
+}
+.element-menu .arrow[data-expand=false] {
+  -webkit-transform: rotate(-90deg) scale(1.2);
+          transform: rotate(-90deg) scale(1.2);
+}
+.element-menu .sub-menu {
+  text-indent: 1rem;
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  margin-top: 0;
+  margin-left: 0.75rem;
+  border-left: 1px solid #999;
+}
+.element-menu .sub-menu[data-expand=true] {
+  max-height: 800px;
+}
+.element-menu .sub-menu[data-expand=false] {
+  max-height: 0;
+}
+.element-menu .sub-menu li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0;
+}
+.element-menu .sub-menu li a {
+  display: block;
+  padding: 0.375rem 0;
+}
+.element-menu .sub-menu li:hover {
+  background: rgba(125, 125, 125, 0.05);
+  border-radius: 0 2rem 2rem 0;
+}
+.element-menu .sub-menu li[data-active=true] {
+  background: rgba(125, 125, 125, 0.05);
+  border-radius: 0 2rem 2rem 0;
+}
+.element-menu .sub-menu li[data-active=true] a {
+  color: #333;
+  font-weight: bold;
+}
+.element-menu .copyright {
+  color: #aaa;
+  padding-top: 1rem;
+  margin-right: -1rem;
+  border-top: 1px solid #ccc;
+}
+
+.element-menu-item {
+  cursor: pointer;
+}
+
+.element-content {
+  padding: 0 2rem;
+  padding-bottom: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.color-card {
+  min-width: 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 1rem;
+}
+.color-card .color {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 0.5rem;
+}
+.color-card span {
+  font-size: 0.8rem;
+}
+
+table.element-table.table tbody td {
+  max-width: unset;
+  white-space: break-spaces;
+}
+table.element-table.table tbody td:first-child {
+  min-width: 7rem;
+}
+
+.text-h3 {
+  border-top: 1px solid #ccc;
+}
+
+.text-h5, .text-h3 {
+  padding-top: 2rem;
+}
+
+pre {
+  margin-bottom: 2rem;
+}
+pre + .caption {
+  margin-top: -1.5rem;
+  padding-bottom: 2rem;
+}
+
+.table.autosize td img, table.dataTable td img {
+  max-width: unset;
+  max-height: unset;
+}

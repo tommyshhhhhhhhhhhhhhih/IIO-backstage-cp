@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>訂單資訊</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>訂單管理>訂單資訊
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">訂單資訊
+                  </h2>
+                </div>
+                <fieldset>
+                  <div class="b-text-field">
+                    <label>訂單編號</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.orderId }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>訂單狀態</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">付款成功</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>購買途徑</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.path }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>提供者</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ orderDetail.provider }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>購買商品</label>
+                    <div class="table">
+                      <table> 
+                        <thead> 
+                          <tr> 
+                            <td>商品名稱</td>
+                            <td>商品ID</td>
+                            <td>數量</td>
+                            <td>價格</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>     <a :href="orderDetail.item.link">{{ orderDetail.item.label }}</a></td>
+                            <td>123456789465</td>
+                            <td class="text-right">1</td>
+                            <td class="text-right">1,688</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="text-h4">付款資訊</div>
+                  <div class="b-text-field">
+                    <label>商品價格</label>
+                    <div class="b-field-row">
+                      <p class="readonly">{{ '$ ' + orderDetail.item.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' TWD'}}</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>付款方式</label>
+                    <div class="b-field-row">
+                      <p class="readonly">橘子支付</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>使用優惠</label>
+                    <div class="b-field-row">
+                      <p class="readonly">無</p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="text-h4">發票資訊</div>
+                  <!--  發票資訊-->
+                  <div class="b-text-field">
+                    <label>發票類型</label>
+                    <div class="b-field-row">
+                      <p class="readonly">個人電子發票 - 手機載具</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field">
+                    <label>發票編號</label>
+                    <div class="b-field-row">
+                      <p class="readonly">AB-12223486</p>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-secondary outline" data-size="lg" type="button" onclick="window.location.href='./CP4.1_order-list.html'">返回訂單列表</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('訂單總覽');
+      var jQfn = function (){
+      
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  orderDetail: {
+                      orderId: 'ORD-1562792771583',
+                      userId: 'aaa123456',
+                      path: 'B2C 商城',
+                      provider: 'OO供應商',
+                      phone: '0912345678',
+                      mail: 'deanna.curtis@example.com',
+                      item: {
+                          link: 'javascript:;',
+                          label: '[熱門] 超級厲害又可愛的小丸子鞋子(點擊外開商品頁)',
+                          id: 'asdlifjalsifdj',
+                          price: 1688,
+                          history: [
+                              {
+                                  time: '2021-10-29 04:03 AM',
+                                  activity: '取消刊登'
+                              },
+                              {
+                                  time: '2021-10-25 09:06 AM',
+                                  activity: '刊登至fun市集'
+                              },
+                              {
+                                  time: '2021-10-24 09:06 AM',
+                                  activity: '自遊戲回背包'
+                              },
+                              {
+                                  time: '2021-10-06 09:06 AM',
+                                  activity: '自背包到遊戲'
+                              },
+                          ]
+                      },
+                      price: 1688,
+                      assetState: '',
+                  },
+                  btnLoading: {
+                      refund: false,
+                      sendRefund: false,
+                  },
+                  refundReason: {
+                      value: '',
+                      maxLength: 200
+                  },
+                  copyBtn: false,
+                  refundSent: false,
+              }
+          },
+          watch: {
+          },
+          methods: {
+              copyID: function(id) {
+                  let copyText = document.querySelector(id);
+                  console.log(copyText);
+                  vm.copyBtn = true
+                  copyText.select();
+                  document.execCommand("copy");
+                  window.setTimeout(function(){
+                      vm.copyBtn = false
+                  }, 2000);
+      
+              },
+              sendResult: function(){
+                  $('#sentComfirm').modal('hide')
+                  $('#success').modal('show')
+              },
+              saveForm: function (){
+                  this.submitBtnStatus.disabled = true  
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>密碼變更</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="app">
+      <div class="py-xl d-flex justify-content-center align-items center">
+        <div class="animated flipInX" id="pw">
+          <div class="card">
+            <div class="form-wrap" id="basic-form">
+              <h2 class="text-h3 pb-xs">密碼修改</h2>
+              <p class="pb-lg">您已使用預設密碼登入，請變更密碼</p>
+              <fieldset>
+                <div class="b-text-field-column w-100">
+                  <label>密碼</label>
+                  <div class="b-input-wrap">                 
+                    <input class="b-password" type="password" v-model="pw" placeholder="請輸入密碼" maxlength="20">
+                    <p class="b-input-hint" :class="passwordHint.length? 'validate-success': 'validate-error'"><span class="material-icons">{{ passwordHint.length? 'done': 'priority_high' }} </span>密碼最少 8 位英數字</p>
+                    <p class="b-input-hint" :class="passwordHint.upperCase? 'validate-success': 'validate-error'"><span class="material-icons">{{ passwordHint.upperCase? 'done': 'priority_high' }} </span>最少包含一個大寫字母</p>
+                    <p class="b-input-hint" :class="passwordHint.specialSymbol? 'validate-success': 'validate-error'"><span class="material-icons">{{ passwordHint.specialSymbol? 'done': 'priority_high' }} </span>最少包含一個特殊符號</p>
+                  </div>
+                </div>
+                <div class="b-text-field-column w-100">
+                  <label>密碼驗證</label>
+                  <div class="b-input-wrap">    
+                    <input class="b-password" type="password" v-model="pw2" placeholder="再次輸入密碼">
+                    <p class="b-input-hint validate-error" v-if="pw !== pw2">密碼不相符</p>
+                  </div>
+                </div>
+                <div class="d-flex d-flex align-items-start f-wrap">
+                  <div class="b-text-field">
+                    <div class="b-input-wrap mr-sm">
+                      <input class="b-password m-none" type="text" v-model="captchaValue" placeholder="輸入驗證碼">
+                    </div>
+                  </div><img class="captcha" src="https://fakeimg.pl/100x35/dddddd/?text=354d45" alt="">
+                  <div class="b-btn-secondary outline" id="refreshCaptcha" data-size="xs" @click="captcha=!captcha">刷新驗證碼</div>
+                </div>
+                <p class="b-input-hint validate-error pt-xs" v-if="captcha">請刷新驗證碼</p>
+              </fieldset>
+              <div class="b-form-button">
+                <button class="b-btn-primary" data-size="lg" data-toggle="modal" data-target="#success" :disabled="btnDisable">密碼變更</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="success" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm" role="document">
+          <div class="modal-img" data-type="success"><img src="" alt=""></div>
+          <div class="modal-content">
+            <div class="modal-body text-center">
+              <h3 class="modal-title">密碼修改成功</h3>
+              <p>已修改您的密碼，請妥善保管您的密碼，並請於下次登入時使用該密碼。</p>
+            </div>
+            <div class="modal-footer justify-content-center pt-none">
+              <button class="b-btn-default" data-size="lg" type="button" data-dismiss="modal" onclick="window.location.href='./CP1.0_index.html'">確認</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              a: 1,
+              pw: "",
+              pw2: '',
+              verifyCode:'',
+              captcha: true,
+              captchaValue: '',
+              passwordHint: {
+                  length: false,
+                  upperCase: false,
+                  specialSymbol: false
+              },
+          
+          },
+          watch: {
+              pw: function(val) {
+                  this.passwordValidate(val);
+              }
+          },
+          computed: {
+              btnDisable: function () {
+                  function isPwDone(element, index, array) {
+                      return element;
+                  }
+                  let validation1 = Object.values(this.passwordHint).every(isPwDone)
+                  let btnActive = validation1 === true && this.pw === this.pw2 && this.captchaValue
+                  return  !btnActive
+              }
+          },
+          methods: {
+              passwordValidate (val) {
+                  var pattern = new RegExp("[`~!@#$^&*()=|':;',.<>//?~！@#&*]");
+                  val.length > 7 ? this.passwordHint.length = true : this.passwordHint.length = false;
+                  val !== val.toLowerCase() ? this.passwordHint.upperCase = true : this.passwordHint.upperCase = false;
+                  pattern.test(val) ? this.passwordHint.specialSymbol = true: this.passwordHint.specialSymbol = false;
+      
+              }
+          }
+      })
+    </script>
+  </body>
+</html>

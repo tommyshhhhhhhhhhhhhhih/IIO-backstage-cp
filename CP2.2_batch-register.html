@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>批次註冊</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>批次註冊
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <div class="form-top pb-none pt-xs px-xs">
+                <h2 class="text-h3">批次註冊
+                </h2>
+              </div>
+              <template v-if="loading">
+                <div class="loading animated fadeIn">
+                  <div class="loading-card">
+                    <div class="loading-img"><img src="./img/loading.gif" alt=""></div><span>資料讀取中</span>
+                  </div>
+                </div>
+              </template>
+              <div class="d-flex justify-content-center px-md">
+                <div class="col mr-xs p-md bg-gray-1 rounded"> <span class="text-h5 pb-md">Step.1</span>
+                  <p class="pb-sm t-l">依照範例檔案，逐欄填寫資產資料，包含圖檔名稱</p>
+                  <div class="b-btn-secondary outline" data-size="sm">下載範例 .csv</div>
+                </div>
+                <div class="col mx-xs p-md bg-gray-1 rounded"> <span class="text-h5 pb-md">Step.2</span>
+                  <p class="pb-sm t-l">將欲上傳的圖片全選，點擊右鍵壓縮為 .zip 上傳</p><img class="w-100" src="./img/zipped-demo.png" alt="">
+                </div>
+                <div class="col ml-xs p-md bg-gray-1 rounded"> <span class="text-h5 pb-md">Step.3</span>
+                  <p class="pb-sm t-l">圖片上傳完畢後，至 <a class="link-primary" href="./CP2.3_assets-list.html">註冊資產清單</a>，確認批次上傳資料是否有誤</p>
+                </div>
+              </div>
+              <hr>
+              <div class="px-md">
+                <label class="b-btn-primary ml-none outline" for="batchAdd" data-size="md">選擇檔案
+                  <input type="file" id="batchAdd" accept=".csv" v-model="tempFile" @change="uploadFile">
+                </label>
+                <div class="text-h4">批次處理列表：</div>
+                <ul class="b-tabs">
+                  <li class="b-tab-item"><a class="b-tab-link" href="javascript:;" :class="currentTab == 'process'? 'active': ''" @click="currentTab = 'process'">處理中</a></li>
+                  <li class="b-tab-item"><a class="b-tab-link" href="javascript:;" :class="currentTab == 'completed'? 'active': ''" @click="currentTab = 'completed'">已完成</a></li>
+                </ul>
+                <div class="table-responsive" v-show="currentTab == 'process'">
+                  <table class="table table-hover">
+                    <thead> 
+                      <tr>
+                        <th>ID</th>
+                        <th>檔案名稱</th>
+                        <th>圖片上傳</th>
+                        <th>狀態</th>
+                        <th>上傳結果</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- 無資料-->
+                      <tr v-if="!list.length">
+                        <td class="t-c nodata" colspan="6"> <span class="material-icons">description</span><br><span>尚無資料 </span></td>
+                      </tr>
+                      <tr v-for="(item,idx) in list"> 
+                        <td>{{ idx + 1 }}</td>
+                        <td> 
+                          <p>{{ item.fileName }}<span class="b-caption pl-sm">{{ item.size }} kb</span></p>
+                          <button class="b-btn-secondary ml-none outline" data-size="xs" :disabled="list[idx].uploading" @click="list.splice(idx, 1)">取消</button>
+                          <button class="b-btn-primary" data-size="xs" :disabled="list[idx].uploading" @click="uploadConfirm(idx)">確定上傳</button>
+                        </td>
+                        <td> 
+                          <p v-if="item.zipName">{{ item.zipName }}</p>
+                          <p class="b-caption" v-else>尚未選擇檔案</p>
+                          <label class="b-btn-primary outline ml-none" :for="'batchImg' + idx" data-size="xs" :disabled="item.imgChose">選擇圖片
+                            <input type="file" :id="'batchImg' + idx" accept=".zip" :disabled="item.imgChose" :data-id="idx" multiple="multiple" @change="uploadFile">
+                          </label>
+                          <button class="b-btn-primary" data-size="xs" :disabled="item.imgUpload" @click="imgUploadConfirm(idx)">確定上傳</button>
+                        </td>
+                        <td class="t-c"> 
+                          <!--上傳皆完成-->
+                          <!-- span.b-caption 已完成-->
+                          <!--.csv上傳完 -->
+                          <!-- span.b-caption 請上傳圖片-->
+                          <!-- img(src="./img/loading.gif", alt=""  style="width: 1rem;")-->
+                          <!-- 圖片上傳中-->
+                          <!-- p.b-caption 圖片上傳中-->
+                          <!-- 圖片上傳中-->
+                          <template v-if="item.imgUploading"><img src="./img/loading.gif" alt="" style="width: 1rem;">
+                            <p class="b-caption">資料上傳中</p>
+                          </template>
+                        </td>
+                        <td class="pr-lg"> 
+                          <template v-if="item.isFileUploaded &amp;&amp; item.isImgUploaded"><span class="badge-success">上傳成功</span><br><span class="b-caption">請到註冊資產清單查看內容</span></template>
+                          <template v-else-if="item.isFileUploaded"><span class="badge-success">excel上傳成功</span></template>
+                        </td>
+                        <td> 
+                          <button class="b-btn-default" data-size="sm" data-toggle="modal" data-target="#errorDetail">查看細節</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="b-table-wrap" v-show="currentTab == 'completed'">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="completedList">
+                      <thead> 
+                        <tr>
+                          <th>ID</th>
+                          <th>上傳時間</th>
+                          <th>檔案名稱</th>
+                          <th>圖片上傳</th>
+                          <th>狀態</th>
+                          <th>上傳結果</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(item,idx) in dataGrid">
+                          <td>{{  item.id }}</td>
+                          <td> <span>{{ item.date }}</span></td>
+                          <td> 
+                            <p>{{ item.fileName }}<span class="b-caption pl-sm">{{ Math.random() }} kb</span></p>
+                            <button class="b-btn-secondary ml-none outline" data-size="xs" disabled>取消</button>
+                            <button class="b-btn-primary" data-size="xs" disabled>確定上傳</button>
+                          </td>
+                          <td> 
+                            <p>{{ item.imgFile }}</p>
+                            <label class="b-btn-primary outline ml-none" for="batchImgidx" data-size="xs" :disabled="!item.editable">選擇圖片
+                              <input type="file" id="batchImgidx" accept=".zip" :disabled="!item.editable">
+                            </label>
+                            <button class="b-btn-primary" data-size="xs" :disabled="!item.editable">確定上傳</button>
+                          </td>
+                          <td class="t-c"> </td>
+                          <td class="pr-lg"> 
+                            <template v-if="item.id === 1"><span class="badge-success">上傳成功</span><br><span class="b-caption">請到註冊資產清單查看內容</span></template>
+                            <template v-if="item.id === 2"><span class="text-danger">上傳失敗</span></template>
+                            <template v-if="item.id === 3">
+                              <p class="text-danger">圖片上傳失敗</p><span class="b-caption">請到重新上傳</span>
+                            </template>
+                          </td>
+                          <td> 
+                            <button class="b-btn-default" data-size="sm" data-toggle="modal" data-target="#errorDetail">查看細節</button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <!-- 查看細節跳窗-->
+              <div class="modal fade" id="errorDetail" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" type="button" onclick="closeModal('#errorDetail',true)" data-bs-dismiss="modal" aria-label="Close"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="modal-title">作業結果檢視</h3>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>上傳的 excel 檔案</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <input class="b-input width-350" type="text" disabled="disabled">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>上傳的圖檔檔案</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <input class="b-input width-350" type="text" disabled="disabled">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>執行結果訊息</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <textarea class="b-textarea" rows="7" cols="48" disabled="disabled"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>作業建立時間</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <input class="b-input" type="text" disabled="disabled">
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-secondary outline" data-size="md" type="button" onclick="closeModal('#errorDetail',true)" data-bs-dismiss="modal" aria-label="Close">關閉</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <script src="js/vue-select.js"></script>
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('批次註冊')
+      
+      var jQfn = function (){
+          // 上傳檔案
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  currentTab: 'process',
+                  imgChose: '',
+                  imgUpload: '',
+                  tempFile: '',
+                  loading: true,
+                  loadingTimer: 100,
+                  batchFile:{
+                      fileName: '',
+                      isFileUploaded: '',
+                      isImgUploaded: '',
+                      uploading: '',
+                      imgUpload: '',
+                      zipName: '',
+                      imgUploading: '',
+                      uploadSuccess: '',
+                      imgChose: '',
+                      imgUpload: '',
+                  },
+                  list: [],
+                  uploaded: false,
+                  dataGrid: [
+                      {
+                          id: 1,
+                          date: '2021/8/1 15:10',
+                          fileName: 'batch-file-1.csv',
+                          imgFile: '圖檔.zip'
+                      },
+                      {
+                          id: 2,
+                          date: '2021/8/2 15:10',
+                          fileName: 'batch-file-2.csv',
+                          imgFile: '圖檔.zip'
+                      },
+                      {
+                          id: 3,
+                          date: '2021/8/3 15:10',
+                          fileName: 'batch-file-3.csv',
+                          imgFile: '圖檔.zip',
+                          editable: true
+                      },
+                      {
+                          id: 4,
+                          date: '2021/8/4 15:10',
+                          fileName: 'batch-file-4.csv',
+                          imgFile: '圖檔.zip'
+                      },
+                  ],
+              }
+          },
+          watch: {
+              list: function() {
+                  //- for(let i=0;i< vm.list.length ; i++) {
+                  //-     window.setTimeout(function(){
+                  //-         vm.list[i].isFileUploaded = true 
+      
+                  //-     }, vm.loadingTimer * (i+1) );
+                  //- }
+              }
+          },
+          methods: {
+              addField:function(item) {
+                  if(item === 'itemProperty') {
+                      let item = {attrName:'',attrKey:'',attrDefault:''}
+                      this.itemProperty.push(item)
+                  }
+              },
+              addFile: function() {
+                  this.list.append(batchFile)
+              },
+              uploadFile: function(e) {
+                  const file = e.target.files[0];
+                  if( e.target.id === 'batchAdd' ) {
+                      this.batchFile.fileName = file.name
+                      this.batchFile.isFileUploaded = false  
+                      this.batchFile.isImgUploaded = false  
+                      this.batchFile.uploading = false
+                      this.batchFile.imgUpload = false
+                      this.batchFile.zipName = ''
+                      this.batchFile.imgUploading = false
+                      this.batchFile.uploadSuccess = false
+                      this.batchFile.imgChose = true
+                      this.batchFile.imgUpload = true
+                      this.batchFile.size = size_format_float(file.size / 1024, 2);
+                      this.list.push(this.batchFile)
+                      this.batchFile = {}
+                      this.tempFile = ''
+                  } else {
+                      const idx = e.target.dataset.id;
+      
+                      this.list[idx].imgUpload = false 
+                      this.list[idx].zipName = file.name
+                      //- console.log(this.list)
+                  }
+              },
+              uploadConfirm: function(idx) {
+                  this.list[idx].uploading = true
+                  this.list[idx].isFileUploaded = true
+                  this.list[idx].imgChose = false
+              },
+              imgUploadConfirm: function(idx) {
+                  this.list[idx].imgUploading = true
+                  this.list[idx].imgUpload = false
+                  window.setTimeout(function(){
+                      vm.list[idx].imgChose = true
+                      vm.list[idx].imgUpload = true
+                      vm.list[idx].imgUploading = false
+                      vm.list[idx].isImgUploaded = true 
+                  }, 3000 );
+              },
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  window.setTimeout(function(){
+                      vm.loading = false
+                  }, vm.loadingTimer);
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+       $(document).ready(function() {
+      
+          $('#completedList').DataTable({
+              "columnDefs": [{ targets: 'no-sort', orderable: false }],
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+          });
+      } );
+    </script>
+  </body>
+</html>

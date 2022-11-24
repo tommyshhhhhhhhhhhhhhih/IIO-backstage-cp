@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>註冊資產清單</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap animated fadeIn" id="app">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"> 廠商後台>資產註冊管理>註冊資產清單
+              </div>
+              <div class="title-wrap">
+                <div class="info">
+                  <h2 class="text-h2">註冊資產清單
+                  </h2>
+                </div>
+                <div class="toolbar"> <a class="b-btn-primary" data-size="md" href="./CP2.1_register-assets.html"><span class="material-icons">add</span><span>註冊資產</span></a>
+                </div>
+                <div class="b-caption w-100">查詢資產、並進行註冊狀態管理
+                </div>
+              </div>
+              <div class="b-search-group">
+                    <div class="b-text-field">
+                      <label>物件ID
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label>資產名稱
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="請輸入資料" required>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-text-field">
+                  <label>資產大類<span>*</span></label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="category.option" v-model="category.value" :clearable="false"></v-select>
+                      </div>
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="subCategory.option" v-model="subCategory.value" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="b-text-field">
+                  <label>供應商<span>*</span></label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="['全部','供應商一', '供應商二', '供應商三']" v-model="searchCp" placeholder="選擇供應商" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">狀態
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="狀態" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="草稿" name="狀態" value="草稿">
+                            <label for="草稿">草稿</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="內部審核中" name="狀態" value="內部審核中">
+                            <label for="內部審核中">內部審核中</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="平台審核中" name="狀態" value="平台審核中">
+                            <label for="平台審核中">平台審核中</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="未通過" name="狀態" value="未通過">
+                            <label for="未通過">未通過</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="審核通過" name="狀態" value="審核通過">
+                            <label for="審核通過">審核通過</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-search-buttons">
+                      <button class="b-btn-default ladda-button" data-size="md" data-style="slide-left" type="button"><span class="ladda-label"><i class="fa fa-search"></i>查詢</span><span class="ladda-spinner"></span>
+                        <div class="ladda-progress" style="width:0"></div>
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="content">
+              <div class="b-table-wrap">
+                <div class="table-responsive">
+                  <table class="table table-hover" id="productList">
+                    <thead> 
+                      <tr>
+                        <th>狀態</th>
+                        <th>註冊資產</th>
+                        <th class="no-sort">常用屬性</th>
+                        <th>資產大類</th>
+                        <th>次分類</th>
+                        <th>供應商</th>
+                        <th>更新時間</th>
+                        <th class="no-sort">資產功能</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template> 
+                        <tr v-for="item,idx in dataGrid">
+                          <td> <span class="b-caption">{{status[item.status].label}}</span></td>
+                          <td>
+                            <div class="d-flex align-items-center"><img class="b-t-img" src="https://fakeimg.pl/60x40/dddddd/?text=img">
+                              <div class="b-t-info">
+                                <h3 class="b-t-info-title width-200 b-to-e">{{item.name}}</h3>
+                                <div class="d-flex align-items-center"><span class="b-caption width-150 b-to-e">{{item.id}}</span>
+                                  <div class="b-btn-default outline m-none" data-size="xs" @click="copyAlert(idx)" :disabled="item.copied"> 
+                                    <template v-if="!item.copied">複製</template>
+                                    <template v-else>
+                                       已複製</template>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td> 
+                            <button class="b-btn-default text mb-none px-xs" data-size="sm" @click="regularAttribute">常用屬性 </button>
+                          </td>
+                          <td>{{item.category}}</td>
+                          <td>{{item.subCategory}}</td>
+                          <td> <span class="b-caption-l">{{item.cp}}</span></td>
+                          <td> <span class="b-caption-l">{{item.update_time}}</span></td>
+                          <td><a class="b-btn-default text m-none px-xs" data-size="sm" href="CP2.3.1_asset-detail-readonly.html" v-if="item.read">查看 </a><a class="b-btn-default text m-none px-xs" data-size="sm" href="CP2.3.1_asset-detail-return.html" v-if="item.edit">編輯 </a><a class="b-btn-default text m-none px-xs" data-size="sm" href="" v-if="item.delete" data-toggle="modal" data-target="#deleteConfirm">刪除 </a></td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!-- 常用屬性-->
+              <div class="modal fade" id="setAttribute" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" type="button" onclick="closeModal('#setAttribute',true)" aria-label="Close"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="modal-title">常用屬性</h3>
+                        <button class="b-btn-primary" data-size="sm" @click="addAttr"><span class="material-icons">add</span><span>新增</span></button>
+                      </div>
+                      <div class="d-flex">
+                        <div class="b-card-wrap grow-1 pr-lg height-300">
+                          <template>
+                            <div class="b-card" v-for="item,idx in attributeSet" @click="setCurrentAttr(idx)" :class=" attributeCurrentIdx == idx ?'active': 'pointer'">
+                              <div class="b-card-header">
+                                <h3 class="b-card-header">{{item.name}}</h3>
+                              </div>
+                            </div>
+                          </template>
+                        </div>
+                        <div class="w-70 p-md pt-none pl-lg height-300 divider-left"> 
+                          <template v-if="attributeEdit || attributeCreate">
+                            <div class="d-flex justify-content-btween">
+                              <div class="text-h4 mr-sm">編輯屬性</div>
+                              <div class="text-h4 mr-sm" v-if="attributeCreate">新增屬性組合</div>
+                              <button class="button-icon" v-if="attributeEdit &amp;&amp; !attributeCurrent.default" data-toggle="modal" data-target="#deleteConfirm"><span class="material-icons">delete</span></button>
+                            </div>
+                            <form @submit.prevent="saveAttr" method="post">
+                              <fieldset>
+                                <div class="b-text-field mb-0">
+                                  <label>組合名稱*</label>
+                                  <div class="b-input-wrap">
+                                    <input class="b-input" type="text" v-model="attributeCurrent.name" :class="attributeCurrent.name? '': 'error'" maxlength="16" placeholder="組合名稱" name="setName">
+                                  </div>
+                                </div>
+                                <template>
+                                  <div class="b-text-field mb-0" v-for="attrE in attributeCurrent.attribute">
+                                    <label>{{attrE.label}}*</label>
+                                    <div class="b-input-wrap">
+                                      <input class="b-input" type="text" :class="attrE.value? '': 'error'" :name="attrE.name" v-model="attrE.value" maxlength="16" :placeholder="'請輸入'+attrE.label">
+                                    </div>
+                                  </div>
+                                </template>
+                              </fieldset>
+                              <div class="b-form-button pb-none">
+                                <p class="alert alert-danger" v-if="isAttrEmpty">資料尚未填寫完畢</p>
+                                <button class="b-btn-default" data-size="md" type="button" @click="attributeEdit = false;attributeCreate = false">取消</button>
+                                <button class="b-btn-primary" data-size="md" type="submit">儲存</button>
+                              </div>
+                            </form>
+                          </template>
+                          <template v-if="!attributeCreate &amp;&amp; !attributeEdit">
+                            <ul>
+                              <li class="d-flex align-items-start"><span class="text-h4 d-inline mr-sm">{{attributeCurrent.name}}</span>
+                                <button class="button-icon mr-md d-inline" @click="attributeEdit = true" v-if="!attributeCurrent.default"><span class="material-icons">edit</span></button>
+                              </li>
+                              <li v-for="attrR in attributeCurrent.attribute">{{attrR.label}}: {{attrR.value}}</li>
+                            </ul>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 尚未儲存-->
+              <div class="modal fade" id="saveWarning" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="warning"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">尚未儲存</h3>
+                      <p>變更尚未儲存，確定放棄變更資料？</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-danger" data-size="lg" type="button" onclick="closeModal('#saveWarning')">確認</button>
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" onclick="closeModal('#saveWarning')">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 確認刪除-->
+              <div class="modal fade" id="deleteConfirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="error"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">刪除確認</h3>
+                      <p>刪除後將無法回復，確定執行？</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-danger" data-size="lg" type="button" @click="removeAttr">確認</button>
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" onclick="closeModal('#deleteConfirm', 'Y')">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vue-->
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- table plugin-->
+    <script src="js/datatables.min.js"></script>
+    <!-- input plugin-->
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('註冊資產清單');
+      
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              category: {
+                  value:'道具',
+                  option: [
+                      {value: 'item', label: '道具'},
+                      {value: 'ticket', label: '票券'},
+                      {value: 'collection', label: '其他'}
+                  ]
+              },
+              searchCp:'供應商一',
+              subCategory: {
+                  value:'全部',
+                  option: [
+                      {value: 'all', label: '全部'},
+                      {value: 'maruko', label: '小丸子'},
+                      {value: 'game2', label: '遊戲二'},
+                      {value: 'game3', label: '遊戲三'}
+                  ]
+              },
+              status: [
+                  {label: '草稿', markColor: 'draft'},
+                  {label: '平台審核中', markColor: 'info'},
+                  {label: '未通過', markColor: 'warning'},
+                  {label: '審核通過', markColor: 'success'},
+                  {label: '內部審核中', markColor: 'info'},
+              ],
+              // 表格的資料
+              dataGrid: [
+                  {
+                      id:'c2a98d80-9963-4640-862e-442ad15f2b3c',
+                      name: '小丸子帽子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 4,
+                      cp: 'OX供應商',
+                      update_time: '2021/8/9 19:00',
+                      edit: true,
+                      read: false,
+                      delete: true
+                  },{
+                      id:'c2a98d80-9963-4640-862e-442ad15f2b3c',
+                      name: '小丸子帽子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 0,
+                      cp: 'OX供應商',
+                      update_time: '2021/8/9 19:00',
+                      edit: true,
+                      read: false,
+                      delete: true
+                  },
+                  {
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },{
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '小丸子裙子',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '小丸子書包',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 16:00',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"2250f36f-723d-42d3-8506-fda907c8f292",
+                      name: '小丸子鉛筆盒',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:30',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 10:00',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '小丸子書包',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 18:00',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '小丸子書包',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '小丸子書包',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: true,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"2250f36f-723d-42d3-8506-fda907c8f292",
+                      name: '小丸子鉛筆盒',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      category: '道具',
+                      subCategory: '小丸子',
+                      copied: false,
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: false,
+                      read: true,
+                      delete: false
+                  }
+              ],
+              attributeEdit: false,
+              attributeCreate: false,
+              attributeCurrent: {},
+              isAttrEmpty:false,
+              attributeCurrentIdx: 0,
+              attributeDefault: { 
+                  name: '常用屬性組合',
+                  default: true,
+                  attribute: [
+                      {label: '等級',name:'level', value: ""},
+                      {label: '顏色',name:'color', value: ""},
+                      {label: '天賦',name:'given', value: ""}
+                  ]
+              },
+              attributeSet: [
+                  { 
+                      name: '紅色lv5',
+                      attribute: [
+                          {label: '等級',name:'level', value: 5},
+                          {label: '顏色',name:'color', value: "紅色"},
+                          {label: '天賦',name:'given', value: "舉一反三"}
+                          
+                      ]
+                  },
+                  { 
+                      name: '預設',
+                      default: true,
+                      attribute: [
+                          {label: '等級',name:'level', value: 1},
+                          {label: '顏色',name:'color', value: "黃色"},
+                          {label: '天賦',name:'given', value: "呼朋引伴"}
+                      ]
+                  },
+              ],
+      
+          },
+          methods: {
+              regularAttribute() {
+                  this.attributeCurrent = JSON.parse(JSON.stringify(this.attributeSet[0]))
+                  this.attributeEdit = false
+                  $('#setAttribute').modal('show')
+                  return false;
+              },
+              setCurrentAttr(idx) {
+                  if (!this.attributeEdit){
+                      this.attributeCurrentIdx = idx 
+                      this.attributeCurrent = JSON.parse(JSON.stringify(this.attributeSet[this.attributeCurrentIdx]))
+      
+                  } else {
+                      $('#saveWarning').modal('show')
+                  }
+              },
+              saveAttr(){
+                  let newName = this.attributeCurrent.name
+                  let isAttrEmpty = this.attributeCurrent.attribute.every(function(item, index, array){
+                      return item.value
+                  });
+      
+                  if(newName && isAttrEmpty) {
+                      this.isAttrEmpty = false
+                      if (this.attributeCurrentIdx === false) {
+                          this.attributeSet.unshift(this.attributeCurrent)
+                      } else {
+                          this.attributeSet[attributeCurrentIdx] = this.attributeCurrent
+                      }
+                      this.attributeEdit = false
+                      this.attributeCreate = false 
+                  } else {
+                      this.isAttrEmpty = true
+                  }
+      
+              },
+              addAttr() {
+                  this.attributeEdit = false
+                  this.attributeCreate = true 
+                  this.attributeCurrent = JSON.parse(JSON.stringify(this.attributeDefault))
+                  this.attributeCurrent.default = false
+                  this.attributeCurrentIdx = false
+                  this.attributeCurrent.name = this.attributeCurrent.name + '('+ (this.attributeSet.length + 1) + ')' 
+              },
+              removeAttr() {
+                  this.attributeSet.splice(this.attributeCurrentIdx,1)
+                  this.attributeCurrent = JSON.parse(JSON.stringify(this.attributeSet[0]))
+                  this.attributeCurrentIdx = 0
+                  this.attributeEdit = false
+                  closeModal('#deleteConfirm', 'Y')
+              },
+              copyAlert(idx) {
+                  this.dataGrid[idx].copied = true
+                  window.setTimeout(function(){
+                      vm.dataGrid[idx].copied = false
+                  }, 5000);
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+              })
+          }
+      })
+      $(document).ready(function() {
+          $('#productList').DataTable({
+              "columnDefs": [{ targets: 'no-sort', orderable: false }],
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+              fixedColumns:   {
+                  left: 2,
+                  right: 1
+              }
+          });
+      } );
+    </script>
+  </body>
+</html>

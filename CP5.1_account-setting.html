@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>個人資訊設定</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>帳務管理>個人資訊設定
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">個人資訊設定
+                  </h2>
+                </div>
+                <fieldset>
+                      <div class="b-text-field d-block">
+                        <label>ACCOUNTID</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">000012345</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>名稱</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">OOO數位有限公司</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>連絡電話</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">02-1234-5678</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>Email</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">aaa@testdg.com</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  <div class="b-text-field">
+                    <label>密碼</label><a class="b-btn-secondary outline" data-size="sm" href="./change-pw.html">修改密碼</a>
+                  </div>
+                      <div class="b-text-field d-block">
+                        <label>遊戲</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">遊戲一、遊戲二、遊戲三</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </fieldset>
+                <div class="b-form-button">
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>currentPage('個人資訊')</script>
+  </body>
+</html>

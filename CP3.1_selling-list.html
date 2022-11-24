@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>上架清單</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/datatables.min.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap animated fadeIn" id="app">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum"> 廠商後台>商品上架管理>上架清單
+              </div>
+              <div class="title-wrap">
+                <div class="info">
+                  <h2 class="text-h2">上架清單
+                  </h2>
+                </div>
+                <div class="toolbar"> <a class="b-btn-primary d-inline-block" data-size="md" href="./CP3.1.1_selling-item.html"><span class="material-icons">add</span><span>上架商品</span></a>
+                </div>
+                <div class="b-caption w-100">將已註冊資產刊登到fun市集、或者其他發布通路 (*上架審核約需3-5個工作天，請提早送審以便及時上架喔)
+                </div>
+              </div>
+              <div class="b-search-group">
+                    <div class="b-text-field">
+                      <label>物件ID
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="搜尋物件ID" required>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label>商品名稱
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <input class="b-input" type="text" placeholder="搜尋商品名稱" required>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-text-field">
+                  <label>資產大類<span>*</span></label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="category.option" v-model="category.value" :clearable="false"></v-select>
+                      </div>
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="subCategory.option" v-model="subCategory.value" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="b-text-field">
+                  <label>供應商<span>*</span></label>
+                  <div class="b-field-group">
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <v-select class="b-select" :options="['全部','供應商一', '供應商二', '供應商三']" v-model="searchCp" placeholder="選擇供應商" :clearable="false"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">剩餘庫存
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="剩餘庫存" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="&lt;5" name="剩餘庫存" value="&lt;5">
+                            <label for="&lt;5">&lt;5</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="&lt;10" name="剩餘庫存" value="&lt;10">
+                            <label for="&lt;10">&lt;10</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="b-text-field">
+                      <label class="mb-xxs">狀態
+                      </label>
+                      <div class="b-field-group"> 
+                        <div class="b-field-row">
+                          <div class="b-radio">
+                            <input type="radio" id="全部" name="狀態" value="全部" checked>
+                            <label for="全部">全部</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="草稿" name="狀態" value="草稿">
+                            <label for="草稿">草稿</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="內部審核中" name="狀態" value="內部審核中">
+                            <label for="內部審核中">內部審核中</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="平台審核中" name="狀態" value="平台審核中">
+                            <label for="平台審核中">平台審核中</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="未通過" name="狀態" value="未通過">
+                            <label for="未通過">未通過</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="審核通過" name="狀態" value="審核通過">
+                            <label for="審核通過">審核通過</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                <div class="b-search-buttons">
+                      <button class="b-btn-default ladda-button" data-size="md" data-style="slide-left" type="button"><span class="ladda-label"><i class="fa fa-search"></i>查詢</span><span class="ladda-spinner"></span>
+                        <div class="ladda-progress" style="width:0"></div>
+                      </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="content">
+              <div class="b-table-wrap">
+                <div class="table-responsive">
+                  <table class="table table-hover" id="productList">
+                    <thead> 
+                          <th>狀態</th>
+                          <th>上架顯示名稱</th>
+                          <th>價格</th>
+                          <th>庫存</th>
+                          <th>刊登期間</th>
+                          <th>供應商</th>
+                          <th>更新時間</th>
+                          <th>操作功能</th>
+                    </thead>
+                    <tbody>
+                      <template> 
+                        <tr v-for="item,idx in dataGrid">
+                          <td> <span class="b-caption">{{status[item.status].label}}</span></td>
+                          <td>
+                            <div class="d-flex align-items-center"><img class="b-t-img" src="https://fakeimg.pl/60x40/dddddd/?text=img">
+                              <div class="b-t-info">
+                                <h3 class="b-t-info-title width-200 b-to-e">{{item.name}}</h3>
+                                <div class="d-flex align-items-center"><span class="b-caption width-150 b-to-e">{{item.id}}</span>
+                                  <div class="b-btn-default outline m-none" data-size="xs" @click="copyAlert(idx)" :disabled="item.copied === 'show'">複製ID<span class="copy-alert alert alert-success" :class="item.copied">已複製</span></div>
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td class="t-r"> <span class="b-caption-l">{{item.price}}</span></td>
+                          <td class="t-r"> <span class="b-caption-l">{{item.stock}}</span></td>
+                          <td> 
+                            <p class="b-caption-l">{{item.publishStart}}</p>
+                            <p class="b-caption-l">{{item.publishEnd}}</p>
+                          </td>
+                          <td> <span class="b-caption-l">{{item.cp}}</span></td>
+                          <td> <span class="b-caption-l">{{item.update_time}}</span></td>
+                          <td>
+                            <button class="b-btn-default text m-none px-xs" data-size="sm" @click="openReplenishment(item.name)" v-if="item.status === 3">入庫存</button><a class="b-btn-default text m-none px-xs" data-size="sm" href="./CP3.1.1_selling-item-readonly.html">查看 </a><a class="b-btn-default text m-none px-xs" data-size="sm" :href="item.edit" v-if="item.status &lt; 3">編輯 </a>
+                            <button class="b-btn-default text m-none px-xs" data-size="sm" v-if="item.delete" data-toggle="modal" data-target="#deleteConfirm">刪除 </button>
+                          </td>
+                        </tr>
+                      </template>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <template v-if="loading">
+                <div class="loading animated fadeIn">
+                  <div class="loading-card">
+                    <div class="loading-img"><img src="./img/loading.gif" alt=""></div><span>資料讀取中</span>
+                  </div>
+                </div>
+              </template>
+              <!-- [入庫存跳窗]-->
+              <div class="modal fade" id="replenishment" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="modal-title">加入庫存</h3>
+                      </div>
+                      <div class="d-flex align-items-start mb-sm"><img class="b-t-img mt-xs" src="https://fakeimg.pl/60x40/dddddd/?text=img">
+                        <div class="b-t-info">
+                          <p class="readonly">{{replenishmentLabel}}</p>
+                          <p class="b-caption">目前庫存: 10</p>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>上傳 PIN 碼<span>*</span></label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row mb-xs pt-xs">
+                            <label class="b-btn-primary outline ml-none" for="pinUpload" data-size="md">上傳檔案
+                              <input type="file" id="pinUpload" accept=".csv" @change="replenishmentFile">
+                            </label>
+                            <p class="b-caption pt-xs" v-if="fileName">{{ fileName }}</p>
+                            <p class="b-caption pt-xs" v-else>.csv 檔案大小 < 1MB
+                              <button class="b-btn-secondary text m-none" data-size="xs">下載範例檔案</button>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field">
+                        <label>上傳數量</label>
+                        <div class="b-input-wrap">
+                          <input class="b-input m-none width-150" type="number" v-model="uploadPinInsert" placeholder="上傳數量">
+                        </div>
+                      </div>
+                      <div class="b-text-field">
+                        <label>上傳 PIN 碼數量</label>
+                        <div class="b-input-wrap">
+                          <p class="readonly pt-sm pb-none" v-if="uploadPinCount">{{ uploadPinCount.length }}</p>
+                          <p class="readonly text-A pt-sm pb-non" v-else>-</p>
+                        </div>
+                      </div>
+                      <div class="b-field-group" v-if="uploadPinInsert != uploadPinCount.length &amp;&amp; uploadPinCount">
+                        <div class="b-field-row">
+                          <div class="alert alert-danger"><span class="material-icons">info </span>上傳數量與 PIN 碼數量不符合，請重新確認</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary" data-size="md" type="button" :disabled="uploadPinInsert != uploadPinCount.length" @click="replenishmentSent">送出</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- [無 PIN 入庫存跳窗]-->
+              <div class="modal fade" id="replenishment2" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span class="material-icons">close</span></button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="modal-title">加入庫存</h3>
+                      </div>
+                      <div class="d-flex align-items-start mb-sm"><img class="b-t-img mt-xs" src="https://fakeimg.pl/60x40/dddddd/?text=img">
+                        <div class="b-t-info">
+                          <p class="readonly">{{replenishmentLabel}}</p>
+                          <p class="b-caption">目前庫存: 10</p>
+                        </div>
+                      </div>
+                      <div class="b-text-field">
+                        <label>上架數量</label>
+                        <div class="b-input-wrap">
+                          <input class="b-input m-none width-150" type="number" v-model="uploadPinInsert" placeholder="上架數量">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary" data-size="lg" type="button" :disabled="!uploadPinInsert" @click="replenishmentSent">送出</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- [入庫存送出]-->
+              <div class="modal fade" id="replenishmentSent" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"><img src="" alt=""></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">已收到資料</h3>
+                      <p>商品庫存量更新中，稍後將返回上架清單</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default outline" data-size="md" type="button" data-dismiss="modal">關閉</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- [確認刪除]-->
+              <div class="modal fade" id="deleteConfirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="error"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">刪除確認</h3>
+                      <p>刪除後將無法回復，確定執行？</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-danger" data-size="lg" type="button" data-dismiss="modal">確認</button>
+                      <button class="b-btn-default text no-underline" data-size="md" type="button" onclick="closeModal('#deleteConfirm', 'Y')">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Vue-->
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- table plugin-->
+    <script src="js/datatables.min.js"></script>
+    <!-- input plugin-->
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('上架清單');
+      
+      var vm = new Vue({
+          el: '#app',
+          data: {
+              searchCp:'',
+              loading: false,
+              replenishmentLabel: '',
+              uploadPinCount: 0,
+              uploadPinInsert:0,
+              fileinput:'',
+              fileName:'',
+              category: {
+                  value:'道具',
+                  option: [
+                      {value: 'item', label: '道具'},
+                      {value: 'ticket', label: '票券'},
+                      {value: 'collection', label: '其他'}
+                  ]
+              },
+              subCategory: {
+                  value:'全部',
+                  option: [
+                      {value: 'all', label: '全部'},
+                      {value: 'maruko', label: '小丸子'},
+                      {value: 'game2', label: '遊戲二'},
+                      {value: 'game3', label: '遊戲三'}
+                  ]
+              },
+              status: [
+                  {label: '草稿', markColor: 'draft'},
+                  {label: '平台審核中', markColor: 'info'},
+                  {label: '未通過', markColor: 'warning'},
+                  {label: '審核通過', markColor: 'success'},
+                  {label: '內部審核中', markColor: 'info'},
+              ],
+              dataGrid: [
+                  {
+                      id:'c2a98d80-9963-4640-862e-442ad15f2b3c',
+                      name: '[熱門] 經典特色小丸子帽子',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 4,
+                      cp: 'OX供應商',
+                      update_time: '2021/8/9 19:00',
+                      edit: './CP3.1.1_selling-item.html',
+                      read: false,
+                      delete: true
+                  },
+                  {
+                      id:'904eff96-dc6b-40f7-8692-18ab9e55321a',
+                      name: '[熱門] 經典特色小丸子裙子',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 1,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 15:10',
+                      edit: './CP3.1.1_selling-item.html',
+                      delete: true
+                  },
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 16:00',
+                      edit: './CP3.1.1_selling-item.html',
+                      delete: true
+                  },
+                  {
+                      id:"2150f36f-723d-42d3-8506-fda907c8f292",
+                      name: '無 PIN 的票券',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:30',
+                      edit: './CP3.1.1_selling-item.html',
+                  },
+                  {
+                      id:"2250f36f-723d-42d3-8506-fda907c8f292",
+                      name: '[熱門] 經典特色小丸子鉛筆盒',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:30',
+                      edit: './CP3.1.1_selling-item.html',
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 10:00',
+                      edit: './CP3.1.1_selling-item.html',
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 18:00',
+                      edit: './CP3.1.1_selling-item.html',
+                      delete: true
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item-success.html',
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item.html',
+                      delete: true
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item-success.html',
+                  }
+                  ,
+                  {
+                      id:"a0421970-23c9-48c3-bde6-ef6d1c15b231",
+                      name: '[熱門] 經典特色小丸子書包',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 2,
+                      cp: 'XX供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item.html',
+                      delete: true
+                  },
+                  {
+                      id:"2250f36f-723d-42d3-8506-fda907c8f292",
+                      name: '[熱門] 經典特色小丸子鉛筆盒',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item-success.html',
+                  },
+                  {
+                      id:"40b9efae-a755-4a7b-87c9-28f042d9d324",
+                      name: '[熱門] 經典特色小丸子特殊角色碎片道具僅供萬聖節活動使用',
+                      path: 'fun市集',
+                      price: '1,500',
+                      stock: 10,
+                      publishStart: '2021/12/23 23:59',
+                      publishEnd: '2021/12/25 23:59',
+                      copied: '',
+                      status: 3,
+                      cp: 'OO供應商',
+                      update_time: '2021/8/9 13:00',
+                      edit: './CP3.1.1_selling-item-success.html',
+                  }
+              ],
+          },
+          methods: {
+              replenishmentFile(e) {
+                  const file = e.target.files[0];
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                      vm.fileName = file.name;
+                      vm.fileinput = reader.result;
+                      vm.fileinput = vm.fileinput.split('\r\n')
+                      vm.uploadPinCount = vm.fileinput.filter(function(item, index, array){
+                          return item !== "" && item !== "UUID"; 
+                      })
+                  }
+                  reader.readAsText(file);
+              },
+              replenishmentSent(){
+                  $('#replenishment').modal('hide')
+                  $('#replenishmentSent').modal('show')
+              },
+              openReplenishment(label) {
+                  this.replenishmentLabel = label
+                  if(label === '無 PIN 的票券') {
+                      $('#replenishment2').modal('show')
+                  }else{
+                      $('#replenishment').modal('show')
+                  }
+              },
+              copyAlert(idx) {
+                  this.dataGrid[idx].copied = 'show'
+                   window.setTimeout(function(){
+                      vm.dataGrid[idx].copied = ''
+                  }, 1000);
+              }
+          },
+          mounted: function () {
+          }
+      })
+      $(document).ready(function() {
+          $('#productList').DataTable({
+              "pagingType": "full_numbers",
+              "language": {
+                  "decimal":        "",
+                  "emptyTable":     "沒有可顯示的資料",
+                  "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+                  "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+                  "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+                  "infoPostFix":    "",
+                  "thousands":      ",",
+                  "lengthMenu":     "顯示 _MENU_ 筆資料",
+                  "loadingRecords": "載入中...",
+                  "processing":     "執行中...",
+                  "search":         "篩選資料: ",
+                  "zeroRecords":    "查無符合資料",
+                  "paginate": {
+                      "first":      "第一筆",
+                      "last":       "最後一筆",
+                      "next":       "下一筆",
+                      "previous":   "上一筆"
+                  },
+                  "aria": {
+                      "sortAscending":  ": activate to sort column ascending",
+                      "sortDescending": ": activate to sort column descending"
+                  }
+              },
+              "order": [[ 0, "asc" ]],
+              scrollY:        '25rem',
+              scrollX:        true,
+              searching:      false,
+              scrollCollapse: true,
+              fixedColumns:   {
+                  left: 0,
+                  right: 1
+              }
+          });
+      
+      } );
+    </script>
+  </body>
+</html>

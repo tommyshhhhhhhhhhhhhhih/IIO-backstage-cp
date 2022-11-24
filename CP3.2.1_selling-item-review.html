@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>上架設定</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>商品上架管理>上架管理
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">上架設定
+                  </h2>
+                </div>
+                <div class="status"> 
+                  <div class="step previous"><span class="step-label">1</span><span class="step-name">建立上架資訊</span></div>
+                  <div class="step"><span class="step-label">2</span><span class="step-name">內部審核</span></div>
+                  <div class="step next"><span class="step-label">3</span><span class="step-name">平台審核</span></div>
+                  <div class="step next"><span class="step-label">4</span><span class="step-name">審核結果</span></div>
+                </div>
+                <hr>
+                <fieldset>
+                  <div class="b-text-field"><span class="alert alert-warning mb-none">確認以下資訊後請逐一勾選確認</span></div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">選擇資產
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check1" v-model="checkboxs[0].value">
+                        <label class="pr-xs" for="check1">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <p class="readonly">小丸子帽子 itemId01</p>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>屬性</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row mb-none"></div>
+                      <template v-if="typeof(formData.attribute.value) === 'number' ">
+                        <div class="b-field-row"> 
+                          <ul class="p-md bg-gray-1">
+                            <li>{{attributeSet[formData.attribute.value].name}}</li>
+                            <li v-for="item in attributeSet[formData.attribute.value].attribute">{{ item.label }} {{ item.name }} : {{ item.value }}</li>
+                          </ul>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">商品顯示標題
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check3" v-model="checkboxs[2].value">
+                        <label class="pr-xs" for="check3">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">{{ formData.productName }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block pb-lg pt-xs">
+                    <label class="d-flex align-items-center">商品說明圖片<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" title="&lt;p&gt;詳細說明中的圖檔&lt;/p&gt;&lt;img class='w-100' src='./img/demo/content-img.png' alt=''/&gt;"><span class="material-icons">info</span></span>
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check4" v-model="checkboxs[3].value">
+                        <label class="pr-xs" for="check4">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group pl-xs"> 
+                      <div class="b-field-row">
+                        <template v-for="(item,idx) in formData.productDescImg">
+                          <div class="upload-img-preview"><img class="preview" data-size="small" :src="item.src">
+                            <ul> 
+                              <li class="b-caption">{{item.name}}</li>
+                              <li class="b-caption">大小: {{item.size}} KB</li>
+                            </ul>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">商品詳細說明
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check6" v-model="checkboxs[5].value">
+                        <label class="pr-xs" for="check6">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <p class="readonly">{{ formData.productDesc }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">刊登開始時間
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check7" v-model="checkboxs[6].value">
+                        <label class="pr-xs" for="check7">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <p class="readonly">{{ formData.publishStart }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">刊登結束時間
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check8" v-model="checkboxs[7].value">
+                        <label class="pr-xs" for="check8">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-row">
+                      <div class="b-input-wrap">
+                        <p class="readonly">{{ formData.publishEnd }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">上架位置
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check10" v-model="checkboxs[9].value">
+                        <label class="pr-xs" for="check10">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group">
+                      <div class="b-field-row mb-none">
+                        <div class="b-input-wrap">
+                          <div class="b-checkbox">
+                            <input type="checkbox" id="webstore" v-model="formData.route.webstore" disabled>
+                            <label class="pr-xs" for="webstore">web 商城</label>
+                          </div>
+                        </div>
+                        <div class="b-input-wrap">
+                          <div class="b-checkbox">
+                            <input type="checkbox" id="inappstore" v-model="formData.route.inappstore" disabled>
+                            <label class="pr-xs" for="inappstore">in App 商城</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">設定價格
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check9" v-model="checkboxs[8].value">
+                        <label class="pr-xs" for="check9">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-row">
+                      <p class="readonly pb-none">$ {{ formData.price }} {{ formData.currency }} (bf!coin)</p>
+                      <p class="readonly">$ {{ formData.price2 }} {{ formData.currency }} (GAMA PAY)</p>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label class="d-flex align-items-center">購買限制
+                      <div class="b-checkbox ml-md mb-none">
+                        <input type="checkbox" id="check11" v-model="checkboxs[10].value">
+                        <label class="pr-xs" for="check10">{{checkText}}</label>
+                      </div>
+                    </label>
+                    <div class="b-field-group pl-xs">
+                      <div class="b-field-row">
+                        <p class="readonly">不限</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block pb-lg pt-xs">
+                    <label>目前 PIN 碼數量</label>
+                    <div class="b-field-group">
+                      <p class="readonly">35</p>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-default text mr-none pr-md" data-size="lg" onclick="window.location.href='./CP3.1_selling-list.html'">返回上架清單 </button>
+                  <button class="b-btn-default outline" data-size="lg" type="button" data-toggle="modal" data-target="#rejectConfirm">駁回</button>
+                  <button class="b-btn-primary" data-size="lg" type="button" data-toggle="modal" data-target="#checkedSent" :disabled="!checked">送出平台審核</button>
+                </div>
+              </form>
+              <!-- 送出審核-->
+              <div class="modal fade" id="checkedSent" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">資料已送審</h3>
+                      <p class="b-caption">※ 上架審核需 3 個工作天審核，平台審核過程中若編輯資訊須重新進行審核</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default outline w-100" data-size="lg" type="button" onclick="window.location.href='./CP3.2_selling-review.html'">返回審核清單</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 駁回-->
+              <div class="modal fade" id="rejectConfirm" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="warning"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center pb-sm">
+                      <h3 class="modal-title">確定駁回？</h3>
+                      <p class="pb-sm">駁回後該筆資料將會退回草稿以待再次提出審核</p>
+                      <textarea class="b-textarea m-none" rows="4" cols="48" v-model="rejectReson" placeholder="輸入駁回原因" maxlength="240" required></textarea>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default outline w-100" data-size="lg" type="button" data-toggle="modal" :disabled="!rejectReson" data-target="#rejected">確認</button>
+                      <button class="b-btn-default text w-100" data-size="md" type="button" data-dismiss="modal">取消</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 已駁回-->
+              <div class="modal fade" id="rejected" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">已駁回</h3>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default outline w-100" data-size="lg" type="button" onclick="window.location.href='./CP3.2_selling-review.html'">返回審核清單</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('上架審核');
+      // 預覽圖片
+      var jQfn = function (){
+          
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  replenishmentLabel: '',
+                  checkText: '已確認內容',
+                  fileName:'',
+                  formData: {
+                      productName: '[熱門] 可愛小丸子小學生帽',
+                      productDesc: '包含行銷文字的上架描述的說明會顯示在這裡。每次上架描述不同的行銷用語或者注意事項可以打在這裡。',
+                      productDescImg: [
+                          {
+                              src: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/maxresdefault-1590898973.jpg',
+                              name: '小丸子圖片.jpg',
+                              size: 123
+                          },
+                      ],
+                      route:{
+                          webstore: true,
+                          inappstore: true,
+                      },
+                      attribute: {
+                          value: 1,
+                          dataset: [
+                              {label: '等級',name:'level', value: ''},
+                              {label: '顏色',name:'color', value: ""},
+                              {label: '天賦',name:'given', value: ""}
+                          ]
+                      },
+                      path: 'gmall',
+                      detailImg: [],
+                      tag:[],
+                      publishStart: '2021/5/23 12:00',
+                      publishEnd: '2021/5/29 12:00',
+                      price: 3688,
+                      price2: 3688,
+                      currency: 'TWD',
+                      limitation: {
+                          value: 'all',
+                          count: ''
+                      },
+                  },
+                  checked: true,
+                  checkboxs: [
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                      { value: true },
+                  ],
+                  assetData: {
+                      category: '道具',
+                      subCategory: '小丸子',
+                      img: 'background-image:url(https://i.kfs.io/article5_cover/global/6009451v2/fit/800x420.jpg)',
+                      imgType: "small",
+                      info: '這裡會顯示註冊時寫在定義檔中的商品描述內容，關於內容的商品描述內容。'
+                  },
+                  submitBtnStatus: {
+                      disabled: false,
+                  },
+                  saveBtnStatus: {
+                      disabled: false,
+                      loading: false,
+                      label: '儲存變更'
+                  },
+                  currency:[
+                      {value:'TWD', label: '新台幣'},
+                  ],
+                  attributeSet: [
+                      { 
+                          name: '紅色lv5',
+                          attribute: [
+                              {label: '等級',name:'level', value: 5},
+                              {label: '顏色',name:'color', value: "紅色"},
+                              {label: '天賦',name:'given', value: "舉一反三"}
+                          ]
+                      },
+                      { 
+                          name: '預設',
+                          default: true,
+                          attribute: [
+                              {label: '等級',name:'level', value: 1},
+                              {label: '顏色',name:'color', value: "黃色"},
+                              {label: '天賦',name:'given', value: "呼朋引伴"}
+                          ]
+                      },
+                  ],
+                  rejectReson: '',
+              }
+          },
+          watch: {
+              "formData.limitation.count": function(){
+                  if(this.formData.limitation.count) {
+                      this.formData.limitation.value = 'limited'
+                  } 
+              },
+              checkboxs:{
+                  handler: function(){
+                      let result = this.checkboxs.every(function(item, index, array) {
+                          if (item.value) {
+                              return item
+                          }
+                      })
+                      this.checked = result
+                  }, 
+                  deep:true
+              }
+          },
+          methods: {
+              showAlert: function(){
+                  if(document.querySelectorAll('.validate-error').length>0) {
+                      this.submitBtnStatus.disabled = false  
+                  } else {
+                  }
+              },
+              saveForm: function (){
+                  $('#productSent').modal('show')
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+    </script>
+  </body>
+</html>

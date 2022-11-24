@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>帳號設定</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>後台設定>帳號設定
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">帳號設定
+                  </h2>
+                </div>
+                <fieldset>
+                  <div class="b-text-field d-block" :class="!account.validation? errorClass: ''">
+                    <label>帳號<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input width-300" type="email" v-model.lazy="account.value" maxlength="48" :placeholder="account.placeholder" required><span class="b-caption text-danger" v-if="!account.validation">請輸入符合格式的 Email</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>狀態</label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap"><span class="mb-xs" :class="'badge-' + state.type[state.value].markColor">{{state.type[state.value].label}}</span></div>
+                        <template v-if="state.value !== 0">
+                          <div class="b-input-wrap">
+                            <button class="b-btn-secondary outline mx-none mb-xs" data-size="sm" :data-loading="unlockBtn.loading" type="button" data-toggle="modal" data-target="#unlock">{{ unlockBtn.label }}</button>
+                          </div>
+                          <div class="b-input-wrap">
+                            <p class="b-caption mb-xs">※ 解鎖後，可使用發送至信箱的預設密碼登入</p>
+                          </div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="!name.validation? errorClass: ''">
+                    <label>顯示名稱<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input" type="text" v-model.lazy="name.value" maxlength="32" :placeholder="name.placeholder" required><span class="b-caption text-danger" v-if="!name.validation">請輸入顯示名稱</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>隸屬<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <v-select class="b-select" v-model="vendor.value" :options="vendor.option" disabled autocomplete="off" placeholder="請選擇隸屬廠商"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="!roleGroup.validation? errorClass: ''">
+                    <label>角色分組<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <v-select class="b-select w-100" multiple v-model="roleGroup.value" :options="roleGroup.option" autocomplete="off" placeholder="請選擇角色分組"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block" :class="!dataAuth.validation? errorClass: ''">
+                    <label>資料權限<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <v-select class="b-select w-100" multiple v-model="dataAuth.value" :options="dataAuth.option" autocomplete="off" placeholder="請選擇資料權限"></v-select>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-secondary outline mt-xl" data-size="lg" :disabled="saveBtnStatus.disabled" :data-loading="saveBtnStatus.loading">{{saveBtnStatus.label}}</button>
+                </div>
+              </form>
+              <!-- 解鎖確認-->
+              <div class="modal fade" id="unlock" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">帳號已解鎖</h3>
+                      <p>已將驗證密碼發送至使用者信箱</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-default mb-sm" data-size="lg" type="button" @click="unlockAccount">關閉</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('帳號管理');
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  account: {
+                      value: 'aaa@gashpoint.com',
+                      placeholder: '請輸入 Email 帳號',
+                      validation: true
+                  },
+                  state: {
+                      value: 1,
+                      type:[
+                          {label: '啟用', markColor: 'success'},
+                          {label: '鎖定', markColor: 'warning'},
+                          {label: '已解鎖', markColor: 'info'},
+                          {label: '註銷', markColor: 'draft'}
+                      ]
+                  },
+                  name: {
+                      value: '王大明',
+                      placeholder: '請輸入會員名稱',
+                      validation: true
+                  },
+                  vendor: {
+                      value: {label: 'OO廠商', value: 1},
+                      option: [
+                          {label: 'OO廠商', value: 1},
+                          {label: '廠商01', value: 2},
+                          {label: '廠商02', value: 3},
+                          {label: '廠商03', value: 4},
+                      ],
+                      validation: true
+                  },
+                  roleGroup: {
+                      value: [],
+                      validation: true,
+                      option: [
+                          {label: '管理者', value: 'admin', disabled: true},
+                          {label: '財務', value: 'group1', disabled: false},
+                          {label: '上架人員', value: 'group3', disabled: false},
+                      ],
+                  },
+                  dataAuth: {
+                      value: [],
+                      validation: true,
+                      option: [
+                          {label: '小丸子', value: 'dataIP1', disabled: false},
+                          {label: '遊戲2', value: 'dataIP2', disabled: false},
+                          {label: '遊戲3', value: 'dataIP3', disabled: false},
+                      ],
+                  },
+                  saveBtnStatus: {
+                      disabled: false,
+                      loading: false,
+                      label: '儲存變更'
+                  },
+                  unlockBtn: {
+                      label: '解鎖帳號'
+                  },
+                  errorClass:'validate-error',
+              }
+          },
+          watch: {
+              "account.value": function () {
+                  if(!this.account.value) {
+                      this.account.validation = false
+                  } else if (!this.validEmail(this.account.value)) {
+                      this.account.validation = false
+                  } else {
+                      this.account.validation = true
+                  }
+              },
+              "name.value": function () {
+                  if(!this.name.value) {
+                      this.name.validation = false
+                  } else {
+                      this.name.validation = true
+                  }
+              },
+              "roleGroup.value": function () {
+                  if(this.roleGroup.value.length < 1) {
+                      this.roleGroup.validation = false
+                  } else {
+                      this.roleGroup.validation = true
+                  }
+              },
+              "dataAuth.value": function () {
+                  if(this.dataAuth.value.length < 1) {
+                      this.dataAuth.validation = false
+                  } else {
+                      this.dataAuth.validation = true
+                  }
+              },
+          },
+          methods: {
+              validEmail: function (email) {
+                  var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                  return re.test(email);
+              },
+              validationEmpty: function(cb){
+                  window.setTimeout(function(){
+                      if( typeof cb === 'function' ){
+                          cb();
+                      }
+                  }, 500)
+              },
+              saveForm: function (){
+                  function isFilled() {
+                      if(!vm.account.value) {
+                          vm.account.validation = false
+                      }
+                      if(!vm.name.value) {
+                          vm.name.validation = false
+                      }
+                      if(vm.roleGroup.value.length < 1) {
+                          vm.roleGroup.validation = false
+                      }
+                      if(vm.dataAuth.value.length < 1) {
+                          vm.dataAuth.validation = false
+                      }
+                  }
+                  function validation() {
+                      if(document.querySelectorAll('.validate-error').length > 0) {
+                          $('html, body').animate({
+                              scrollTop: $('.validate-error').offset().top - 50
+                          }, 300);
+                          vm.saveBtnStatus.disabled = false
+                      } else {
+                          vm.showSaved()
+                      }
+                  }
+      
+                  this.saveBtnStatus.disabled = true
+                  isFilled()
+      
+                  window.setTimeout(function(){
+                      validation()
+                  }, 600);
+              },
+              showSaved: function() {
+                  this.saveBtnStatus.loading = true
+                  this.saveBtnStatus.label = '儲存中'
+                  window.setTimeout(function(){
+                      vm.saveBtnStatus.disabled = true
+                      vm.saveBtnStatus.loading = false
+                      vm.saveBtnStatus.label = '已儲存'
+                  }, 2000);
+                  window.setTimeout(function(){
+                      vm.saveBtnStatus.label = '儲存變更'
+                      vm.saveBtnStatus.disabled = false
+                  }, 5000);
+              },
+              unlockAccount: function(){
+                  this.state.value = 2
+                  this.unlockBtn.label = '再次發送'
+                  closeModal('#unlock', 'y');
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+              })
+          }
+      })
+    </script>
+  </body>
+</html>

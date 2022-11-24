@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="img/favicon.ico" rel="icon" type="image/x-icon">
+    <title>註冊資產細節</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/flatpickr.css" rel="stylesheet">
+    <link href="css/vue-select.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/table.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="navbar navbar-inverse fixed-top active" id="header">
+      <div class="navbar-brand"><a id="menu-toggle"><span class="material-icons">menu</span></a>
+        <h1> <a href="./CP1.0_index.html"><span>IIO</span>廠商後台</a></h1>
+      </div>
+      <ul class="topbar-menu">
+        <li><span class="greeting">Have a Good Time</span></li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">notifications</span><span class="red-dot"></span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item"><a class="dropdown-info"><span class="b-caption">[審核通過] 小丸子帽子</span></a>
+                  <div class="date"><span>今天</span><span>16:55</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子鞋子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+                <li class="dropdown-item read">
+                  <div class="dropdown-info">
+                    <p class="b-caption">[審核通過] 小丸子裙子</p>
+                  </div>
+                  <div class="date"><span>8-12</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="btn-group">
+            <button class="dropdown-toggle topbar-btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="material-icons">person_outline</span></button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <ul class="dropdown-list">
+                <li class="dropdown-item read"><a class="dropdown-info" href="./login.html"><span class="b-caption">登出</span></a></li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </header>
+    <div class="container-fluid" id="main-content">
+      <div class="row">
+        <div class="expand" id="sidebar-wrapper">
+          <ul id="sidebar"></ul>
+          <div class="overlay show"></div>
+        </div>
+        <div class="col wrap">
+          <div class="row">
+            <div id="gotop"><span class="material-icons">arrow_upward</span></div>
+            <div class="col content-top">
+              <div class="breadcrum">廠商後台>資產註冊管理>註冊資產清單
+              </div>
+            </div>
+          </div>
+          <div class="row" id="app">
+            <div class="content animated fadeIn">
+              <ul class="nav nav-tabs">
+              </ul>
+              <form class="form-wrap" id="basic-form" @submit.prevent="saveForm()" method="post">
+                <div class="form-top">
+                  <h2 class="text-h3">註冊資產細節
+                  </h2>
+                </div>
+                <div class="status"> 
+                  <div class="step previous"> <span class="step-label">1</span><span class="step-name">建立資產資訊</span></div>
+                  <div class="step previous"> <span class="step-label">2</span><span class="step-name">內部審核</span></div>
+                  <div class="step previous"> <span class="step-label">3</span><span class="step-name">平台審核</span></div>
+                  <div class="step"><span class="step-label">4</span><span class="step-name">審核結果</span></div>
+                </div>
+                <hr>
+                <fieldset>
+                  <div class="b-text-field d-block">
+                    <label>審核結果</label>
+                    <p class="readonly text-A">未通過，請修改後重新審核</p>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>物件ID</label>
+                    <p class="readonly">18a761db-2849-4345-8d2a-9be5e0984bd8</p>
+                  </div>
+                  <!-- ===== [通用] 分類 =====-->
+                  <div class="b-text-field d-block" :class="category.validation">
+                    <label>資產大類<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <v-select class="b-select" :options="categoryOption" v-model="category.value" :clearable="false"></v-select>
+                        </div>
+                        <div class="b-input-wrap">
+                          <template v-if="category.value.value === 'item'" key="subcat">
+                            <v-select class="b-select" :options="subCategory.option" v-model="subCategory.value" placeholder="請選擇次分類" :clearable="false"></v-select>
+                          </template>
+                          <template v-else>
+                            <input class="b-input mr-none" type="text" v-model="subCategory.custom" maxlength="20" placeholder="次分類名稱" required><span class="b-input-hint">{{ subCategory.custom.length }}/20</span>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>供應商<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <v-select class="b-select" :options="cp.option" v-model="cp.value" disabled placeholder="供應商" :clearable="false"></v-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="b-text-field d-block">
+                    <label>狀態<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <p class="readonly">草稿</p>
+                          <!--span.badge-success 審核通過-->
+                          <!--span.badge-info 審核中-->
+                          <!--span.badge-warning 未通過-->
+                          <!-- ===== [道具] 遊戲串接用ID =====-->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <template v-if="category.value.value === 'item'" key="gameSet1">
+                    <div class="b-text-field d-block" :class="assetKey.validation">
+                      <label>遊戲 Item ID<span>*</span></label>
+                      <div class="b-field-group">
+                        <div class="b-field-row mb-none">
+                          <div class="b-input-wrap">
+                            <input class="b-input" type="text" v-model="assetKey.value" :placeholder="assetKey.placeholder" required>
+                          </div>
+                        </div>
+                        <div class="b-field-row"> 
+                          <!-- 重複的遊戲 itemCode 錯誤資訊-->
+                          <p class="p-md bg-gray-2" v-if="assetKey.validation">
+                             此 ItemCode 及效期與以下資產發生衝突： <br>資產名稱：小丸子鉛筆盒<br>ITEM ID：c2a98d80-9963-4640-86d80 <br>資產效期：2022/12/31 23:59</p>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <!-- ===== [通用] 資產名稱 =====-->
+                  <div class="b-text-field d-block" :class="assetName.validation">
+                    <label>資產名稱<span>*</span></label>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <input class="b-input" type="text" v-model="assetName.value" :maxlength="assetName.maxlength" :placeholder="assetName.placeholder" required><span class="b-input-hint">({{ assetName.value.length }}/{{assetName.maxlength}})</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ===== [通用] 長文描述 =====-->
+                  <div class="b-text-field d-block" :class="assetDesc.validation">
+                    <label>資產描述<span>*</span></label>
+                    <div class="b-field-group"> 
+                      <div class="b-field-row">
+                        <div class="b-input-wrap">
+                          <textarea class="b-textarea" rows="4" cols="48" v-model="assetDesc.value" :placeholder="assetDesc.placeholder" :maxlength="assetDesc.maxlength" required></textarea><span class="b-input-hint">({{ assetDesc.value.length }}/{{assetDesc.maxlength}})</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ===== [通用] 背包圖 =====-->
+                  <div class="b-text-field d-block" :class="previewImg.validation">
+                    <label>bf!背包圖示<span>*</span><span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewBackpack"><span class="material-icons">info</span></span></label>
+                    <div class="b-field-group"> 
+                      <div class="b-field-row mb-none">
+                        <label class="b-btn-primary outline ml-none" for="previewImg" data-size="md">選擇檔案
+                          <input type="file" id="previewImg" accept=".png, .jpg, .jpeg" @change="backpackImgPreview">
+                        </label>
+                        <p class="mx-sm mt-xxs" v-if="previewImg.name">{{ previewImg.name }} ({{ previewImg.size }}KB)</p>
+                        <template v-if="category.value.value === 'collection'" key="bfImg"><span class="b-caption d-block pt-xs">376x468 .jpg or .png (<100KB)</span></template>
+                        <template v-else><span class="b-caption d-block pt-xs">670x376 .jpg or .png (<100KB)</span></template>
+                      </div>
+                      <div class="b-field-row mb-none">
+                        <template v-if="previewImg.value">
+                          <div class="img-preview mb-md" :data-type="category.value.value === 'collection'? 'bc':'backpack'"><img :src="previewImg.value"></div>
+                        </template>
+                        <template v-if="previewImg.alert">
+                          <div class="alert alert-danger">{{ previewImg.name }} {{ previewImg.alert }}</div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ===== [通用] fun 市集圖 =====-->
+                  <div class="b-text-field d-block" :class="assetImg.validation">
+                    <label>fun市集商品圖示<span>*</span><span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" data-html="true" :title="previewGmall"><span class="material-icons">info</span></span></label>
+                    <div class="b-field-group">
+                      <!-- [Start] fun市集圖檔選擇-->
+                      <template v-if="category.value.value === 'item'" key="funMarketImg">
+                        <div class="b-field-row mb-none">
+                          <div class="b-radio mr-md">
+                            <input type="radio" id="big" value="big" v-model="imgSize">
+                            <label for="big">大型圖檔</label>
+                          </div>
+                          <div class="b-radio">
+                            <input type="radio" id="small" value="small" v-model="imgSize">
+                            <label for="small">小型圖檔</label>
+                          </div>
+                        </div>
+                      </template>
+                      <div class="b-field-row mb-none">
+                        <label class="b-btn-primary outline ml-none" for="assetImg" data-size="md">選擇檔案
+                          <input type="file" id="assetImg" accept=".png, .jpg, .jepg" @change="assetImgPreview">
+                        </label>
+                        <template v-if="assetImg.name">
+                          <p class="pl-xs mt-xs">{{ assetImg.name }} ({{ assetImg.size }}KB)</p>
+                        </template>
+                        <template v-else>
+                          <template v-if="category.value.value === 'item'" key="funMarketImgItem">
+                            <p class="b-caption" v-if="imgSize === 'big'"> <span class="b-caption assetImgSize d-block pt-xs">圖片：480x480 .jpg or .png (<5MB)</span></p>
+                            <p class="b-caption assetImgSize" v-else> <span class="b-caption assetImgSize d-block pt-xs">圖片：125x125 .jpg or .png (<1MB)</span></p>
+                          </template>
+                          <template v-if="category.value.value === 'ticket'" key="funMarketImgTicket">
+                            <p class="b-caption"> <span class="b-caption assetImgSize d-block pt-xs">圖片：670x376 .jpg or .png (<5MB)</span></p>
+                          </template>
+                          <template v-if="category.value.value === 'collection'" key="funMarketImgCollection">
+                            <p class="b-caption"> <span class="b-caption assetImgSize d-block pt-xs">圖片：376x468 .jpg or .png (<5MB)</span></p>
+                          </template>
+                        </template>
+                      </div>
+                      <div class="b-field-row mb-none">
+                        <template v-if="assetImg.value &amp;&amp; imgSize === 'big' &amp;&amp; category.value.value === 'item'">
+                          <div class="img-preview mb-md" data-type="marketBig"><img :src="assetImg.value"></div>
+                        </template>
+                        <template v-if="assetImg.value &amp;&amp; imgSize === 'small' &amp;&amp; category.value.value === 'item'">
+                          <div class="img-preview mb-md" data-type="marketSmall"><img :src="assetImg.value"></div>
+                        </template>
+                        <template v-if="assetImg.value &amp;&amp; category.value.value === 'ticket'">
+                          <div class="img-preview mb-md" data-type="backpack"><img :src="assetImg.value"></div>
+                        </template>
+                        <template v-if="assetImg.value &amp;&amp; category.value.value === 'collection'">
+                          <div class="img-preview mb-md" data-type="bc"><img :src="assetImg.value"></div>
+                        </template>
+                        <template v-if="assetImg.alert">
+                          <div class="alert alert-danger">{{ assetImg.name }} {{ assetImg.alert }}</div>
+                        </template>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ===== [道具、收藏品] 3D, AR =====-->
+                  <template v-if="category.value.value !== 'ticket'" key="3DAR">
+                    <div class="b-text-field d-block">
+                      <label>3D 呈現<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="若您的資產提供 3D 觀覽，可將檔案上傳於此" v-if="collection.type !== 'collection'"><span class="material-icons">info</span></span></label>
+                      <div class="b-field-group">
+                        <div class="b-field-row mb-none">
+                          <div class="b-input-wrap"> 
+                            <div class="b-checkbox">
+                              <input type="checkbox" id="3dEnable" v-model="asset3D.acitve">
+                              <label class="pr-xs" for="3dEnable">啟用3D功能</label>
+                            </div>
+                          </div>
+                          <label class="b-btn-primary ml-none outline" for="asset3D" data-size="md" :disabled="!asset3D.acitve">選擇檔案
+                            <input type="file" id="asset3D" accept=".glb" :disabled="!asset3D.acitve" @change="asset3DPreview">
+                          </label><span class="pl-xs pt-xs" v-if="asset3D.name">{{ asset3D.name }} ({{ asset3D.size }}KB)</span><span class="b-caption pt-xs" v-else>3D：.glb (<100MB)</span>
+                        </div>
+                        <div class="b-field-row mb-none">
+                          <div class="b-input-wrap"> 
+                            <div class="b-checkbox">
+                              <input type="checkbox" id="AREnable" v-model="assetAR.acitve" :disabled="!asset3D.acitve">
+                              <label class="pr-xs" for="AREnable">啟用AR功能</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <template v-if="assetAR.acitve" key="showAR">
+                      <div class="b-text-field d-block">
+                        <label>Andorid AR 檔案<span>*</span></label>
+                        <div class="b-field-group">
+                          <div class="b-field-row mb-none">
+                            <div class="b-checkbox">
+                              <input type="checkbox" id="aras3d" v-model="assetAR.as3d">
+                              <label class="pr-xs" for="aras3d">檔案同上</label>
+                            </div>
+                            <label class="b-btn-primary ml-none outline" for="assetARAndroid" data-size="md" :disabled="assetAR.as3d">選擇檔案
+                              <input type="file" :disabled="assetAR.as3d" id="assetARAndroid" accept=".glb" @change="arAndroidUpload">
+                            </label><span class="pl-xs pt-xs" v-if="assetAR.android.name" key="androiduploaded">{{ assetAR.android.name }} ({{ assetAR.android.size }}KB)</span><span class="b-caption pt-xs" v-else>檔案規格 .glb (<100MB)</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>iOS AR 檔案<span>*</span></label>
+                        <div class="b-field-group">
+                          <div class="b-field-row mb-none">
+                            <label class="b-btn-primary ml-none outline" for="assetARios" data-size="md">選擇檔案
+                              <input type="file" id="assetARios" accept=".usdz" @change="ariOSUpload">
+                            </label><span class="pl-xs pt-xs" v-if="assetAR.ios.name" key="iosuploaded">{{ assetAR.ios.name }} ({{ assetAR.ios.size }}KB)</span><span class="b-caption pt-xs" v-else>檔案規格 .usdz (<100MB)</span>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                  <!-- ===== [收藏品] 收藏品檔案 =====-->
+                  <template v-if="category.value.value === 'collection'" key="collectionFile">
+                    <!-- ===== [收藏品] 音樂 =====-->
+                    <div class="b-text-field d-block">
+                      <label>音樂檔案</label>
+                      <div class="b-field-group">
+                        <div class="b-field-row mb-none">
+                          <label class="b-btn-primary outline ml-none" for="mediaFile" data-size="md">選擇檔案
+                            <input type="file" id="mediaFile" accept=".mp3">
+                          </label><span class="b-caption d-block pt-xs">音樂格式：待確定 (<100MB)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ===== [收藏品] 影片 =====-->
+                    <div class="b-text-field d-block">
+                      <label> 影片檔案</label>
+                      <div class="b-field-group">
+                        <div class="b-field-row mb-none">
+                          <label class="b-btn-primary outline ml-none" for="mediaFile" data-size="md">選擇檔案
+                            <input type="file" id="mediaFile" accept=".mp4">
+                          </label><span class="b-caption d-block pt-xs">影片格式：待確定 (<100MB)</span>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <!-- ===== [通用] 操作規則 =====-->
+                  <div class="b-text-field d-block">
+                    <label>資產操作規則<span>*</span>(可複選)</label>
+                    <div class="b-field-group pl-xs">
+                      <template v-for="item in assetRule">
+                        <div class="b-checkbox">
+                          <input type="checkbox" :id="item.name" v-model="item.value" :disabled="!item.show.includes(category.value.value)">
+                          <label class="pr-xs" :for="item.name">{{item.label}}</label>
+                          <div class="tooltip-btn" data-toggle="tooltip" data-placement="right" :title="item.tooltip"><span class="material-icons">info</span></div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+                  <!-- ===== [通用] 資產期限 =====-->
+                  <div class="b-text-field d-block" :class="expiration.validation" v-if="category.value.value !== 'collection'" key="assetExpire">
+                    <template v-if="category.value.value === 'ticket'" key="expiredTicket">
+                      <label>票券有效期間<span>*</span><span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="以台灣時間為準，未在此期間無法看到此活動"><span class="material-icons">info</span></span></label>
+                    </template>
+                    <template v-else>
+                      <label>資產效期<span>*</span><span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="以台灣時間為準"><span class="material-icons">info</span></span></label>
+                    </template>
+                    <div class="b-field-group">
+                      <div class="b-field-row">
+                        <input class="b-input mr-xs mb-xs" id="dateRangeStart" type="text" v-model="expirationDateRange.start" placeholder="開始時間"><span class="d-inline-block p-xs mr-xs">~</span>
+                        <input class="b-input mb-xs" id="dateRangeEnd" type="text" v-model="expirationDateRange.end" placeholder="失效時間">
+                      </div>
+                    </div>
+                  </div>
+                  <!-- ===== [通用] 轉實體製作等待時間 =====-->
+                  <!-- ===== [道具] 伺服器 =====-->
+                  <template v-if="category.value.value === 'item'" key="serverSet">
+                    <div class="b-text-field d-block" :class="server.validation">
+                      <label>是否限制伺服器<span>*</span></label>
+                      <div class="b-field-group pl-xs">
+                        <div class="b-field-row mb-none">
+                          <div class="b-radio">
+                            <input type="radio" id="allServer" name="server" value="all" v-model="server.value">
+                            <label for="allServer">不限制</label>
+                          </div>
+                          <div class="b-radio d-flex">
+                            <input type="radio" id="serverLimited" name="server" value="limited" v-model="server.value">
+                            <label for="serverLimited">限定伺服器使用</label>
+                          </div>
+                        </div>
+                        <template v-if="server.value === 'limited'">
+                          <div class="d-flex mb-none" v-for="item, idx in serverList">
+                            <div class="p-xs text-A">{{idx+1}}.</div>
+                            <div class="b-input-wrap inner-label width-150">
+                              <input class="b-input" type="text" v-model="item.attrName" placeholder="伺服器名稱">
+                              <label>伺服器名稱</label>
+                            </div>
+                            <div class="b-input-wrap inner-label width-150">
+                              <input class="b-input" type="text" v-model="item.attrKey" placeholder="伺服器對應 key 值">
+                              <label>對應遊戲 key</label>
+                            </div>
+                            <div class="button-icon" @click="removeField('serverList',idx)"><span class="material-icons">delete</span></div>
+                          </div><span class="b-btn-primary text pl-sm mb-lg" size="md" @click="addField('serverList')"><span class="material-icons">add</span>增加     </span>
+                        </template>
+                      </div>
+                    </div>
+                    <div class="b-text-field d-block">
+                      <label>資產轉移限制<span>*<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="購入後是否限定角色使用"><span class="material-icons">info</span></span></span></label>
+                      <div class="b-field-group pl-xs">
+                        <div class="b-field-row">
+                          <div class="b-input-wrap"> 
+                            <div class="b-checkbox">
+                              <input type="checkbox" id="limitedUse" checked>
+                              <label class="pr-xs" for="limitedUse">限定使用者於單一伺服器/帳號/角色使用</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ===== [道具] 資產屬性 =====-->
+                    <div class="b-text-field d-block">
+                      <label>資產屬性<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="提供使用者更了解道具細節的屬性初始值，依欄位順序顯示內容"><span class="material-icons">info</span></span></label>
+                      <div class="b-field-group pt-xs">
+                        <template v-for="item, idx in itemProperty">
+                          <div class="d-flex mb-none">
+                            <div class="p-xs text-A">{{idx+1}}.</div>
+                            <div class="b-field-row" :class="item.validation">
+                              <div class="b-input-wrap inner-label width-150">
+                                <input class="b-input" type="text" v-model="item.attrName" placeholder="屬性名稱">
+                                <label>屬性名稱</label>
+                              </div>
+                              <div class="b-input-wrap inner-label width-150">
+                                <input class="b-input" type="text" v-model="item.attrKey" placeholder="屬性對應 key 值">
+                                <label>對應遊戲 key</label>
+                              </div>
+                              <div class="b-input-wrap inner-label width-150">
+                                <input class="b-input" type="text" v-model="item.attrDefault" placeholder="屬性預設值">
+                                <label>屬性預設值</label>
+                              </div>
+                              <div class="b-checkbox">
+                                <input type="checkbox" :id="item.attrKey + idx" checked>
+                                <label class="pr-xs" :for="item.attrKey + idx">顯示於頁面</label>
+                              </div>
+                              <div class="button-icon" @click="removeField('itemProperty',idx)"><span class="material-icons">delete</span></div>
+                            </div>
+                          </div>
+                        </template><span class="b-btn-primary text pl-sm mb-lg" size="md" @click="addField('itemProperty')"><span class="material-icons">add</span>增加   </span>
+                      </div>
+                    </div>
+                  </template>
+                      <div class="modal fade" id="success" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm" role="document">
+                          <div class="modal-content">
+                            <div class="modal-body text-center"><img class="ml-a mr-a" src="./img/modal_success.svg" alt="">
+                              <h3 class="modal-title">註冊已送出</h3>
+                              <p>已發送給人員審核，請稍後</p>
+                            </div>
+                            <div class="modal-footer justify-content-center pt-none"><a class="b-btn-primary" data-size="md" href="./CP2.1_product-list.html">確認</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </fieldset>
+                <div class="b-form-button">
+                  <button class="b-btn-secondary outline" data-size="lg" type="button" :disabled="saveBtnStatus.disabled" :data-loading="saveBtnStatus.loading" @click="showSaved">{{saveBtnStatus.label}}</button>
+                  <button class="b-btn-primary" data-size="lg" type="submit" :data-loading="submitBtnStatus.loading">註冊資產 </button>
+                </div>
+              </form>
+              <!-- 資產預覽-->
+              <div class="modal fade" id="previewModal" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable" role="document">
+                  <div class="modal-content bg">
+                    <div class="modal-body d-flex flex-column">
+                      <h3 class="modal-title">請確認填寫資訊</h3>
+                      <div class="b-text-field d-block">
+                        <label>資產類別</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">{{ category.value.label +'-'+ subCategory.value.label }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>資產名稱</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">{{ assetName.value }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>資產描述<span>*</span></label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row">
+                            <div class="b-input-wrap">
+                              <p class="readonly">{{ assetDesc.value }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block pt-xs">
+                        <label>bf!背包圖示</label>
+                        <div class="b-field-group"> 
+                          <div class="b-field-row mb-none">
+                            <div class="b-caption mb-sm">{{ previewImg.name }} {{ previewImg.size }}KB</div>
+                          </div>
+                          <div class="b-field-row">
+                            <div class="img-preview mb-md" data-type="backpack"><img :src="previewImg.value"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>fun市集商品圖示</label>
+                        <div class="b-field-group">
+                          <div class="b-field-row mb-none">
+                            <div class="b-caption mb-sm">{{ assetImg .name }} {{ assetImg .size }}KB</div>
+                          </div>
+                          <div class="b-field-row">
+                            <div class="img-preview mb-md" data-type="marketBig"><img :src="assetImg .value"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>資產效期</label>
+                        <p class="readonly">永久</p>
+                      </div>
+                          <div class="b-text-field d-block">
+                            <label>是否限制伺服器</label>
+                            <div class="b-field-group"> 
+                              <div class="b-field-row">
+                                <div class="b-input-wrap">
+                                  <p class="readonly">不限</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      <div class="b-text-field d-block">
+                        <label>預設資產屬性<span class="tooltip-btn pl-xs" data-toggle="tooltip" data-placement="right" title="提供使用者更了解道具細節的屬性初始值，依欄位順序顯示內容"><span class="material-icons">info</span></span></label>
+                        <div class="b-field-row"> 
+                          <ul class="p-md bg-gray-1">
+                            <li v-for="item in itemProperty">{{ item.attrName }} {{ item.attrKey }} : {{ item.attrDefault }}</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="b-text-field d-block">
+                        <label>資產操作規則<span>*</span></label>
+                        <div class="b-field-group pl-xs">
+                          <template v-for="item in assetRule">
+                            <div class="b-checkbox" v-if="item.show">
+                              <input type="checkbox" :id="item.name" v-model="item.value" disabled>
+                              <label class="pr-xs" :for="item.name">{{item.label}}</label>
+                              <div class="tooltip-btn" data-toggle="tooltip" data-placement="right" :title="item.tooltip"><span class="material-icons">info</span></div>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" @click="openSentDialog">資料送出</button>
+                      <button class="b-btn-default w-100 text no-underline" data-size="md" type="button" data-dismiss="modal">返回編輯</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- 送出-->
+              <div class="modal fade" id="assetSent" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm" role="document">
+                  <div class="modal-img" data-type="success"></div>
+                  <div class="modal-content">
+                    <div class="modal-body text-center">
+                      <h3 class="modal-title">資料已送審</h3>
+                      <p class="text-A b-caption">※ 若資料需修改，請於內部進行駁回再進行調整</p>
+                    </div>
+                    <div class="modal-footer justify-content-center pt-none">
+                      <button class="b-btn-primary w-100 mb-sm" data-size="lg" type="button" onclick="window.location.href='./CP2.1_register-assets.html'">註冊其他資產</button>
+                      <button class="b-btn-default w-100 text no-underline" data-size="md" type="button" onclick="window.location.href='./CP2.3_assets-list.html'">返回資產清單</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="copyright">&copy;2021 GASH Co, Ltd. All Right Reserved. </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vue.min.js"></script>
+    <!-- jQuery-->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Bootstrap Core JavaScript-->
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/flatpickr.js"></script>
+    <!-- multiselector-->
+    <script src="js/vue-select.js"></script>
+    <!-- Custom JavaScript-->
+    <script src="js/sidebar.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+      currentPage('註冊資產清單')
+      
+      var jQfn = function (){
+      
+          $("#dateRangeStart").flatpickr({
+              static: true,
+              enableTime: true,
+              enableSeconds: true,
+              dateFormat: "Y/m/d H:i:ss",
+              minDate: new Date().fp_incr(3)
+          });
+          $("#dateRangeEnd").flatpickr({
+              static: true,
+              enableTime: true,
+              enableSeconds: true,
+              dateFormat: "Y/m/d H:i:ss",
+              minDate: vm.expirationDateRange.start,
+          });
+      }
+      
+      var vm = new Vue({
+          el: '#app',
+          data() {
+              return {
+                  previewBackpack: `
+                      <p>資產在背包內呈現所使用的圖片</p>
+                      <p>圖片安全範圍示意</p>
+                      <img class='w-100' src='./img/demo/safe.png', alt=''/>
+                      <p>背包資產細節</p>
+                      <img class='w-100' src='./img/demo/backpack-list.png', alt=''/>
+                      <img class='w-100' src='./img/demo/backpack-detail.png', alt=''/>
+                      `,
+                  previewGmall: `
+                      <p>資產在fun市集中呈現的圖檔</p>
+                      <div class='d-flex'>
+                          <div class='w-100 pr-xs'>
+                              <p>大型圖檔</p>
+                              <img class='w-100' src='./img/demo/IIO-big.png', alt=''/>
+                          </div>
+                          <div class='w-100 pr-xs'>
+                              <p>小型圖檔</p>
+                              <img class='w-100' src='./img/demo/IIO-small.png', alt=''/>
+                          </div>
+                          <div class='w-100'>
+                              <p>商品清單</p>
+                              <img class='w-100' src='./img/demo/IIO-list.png', alt=''/>
+                          </div>
+                      </div>
+                  `,
+                  topAttribute: `
+                      <p>當商品關鍵屬性值封頂時，顯示資訊在商品清單頁上</p>
+                      <img class='w-100' src='./img/demo/top-attribute.png', alt=''/>
+                  `,
+                  topAtteSet:false,
+                  maxWord: 'Max',
+                  ticket: {
+                      eventType: 'normal',
+                      eventRange: {
+                          start: '2022/1/8 23:59',
+                          end: '2022/12/23 23:59'
+                      },
+                      eventGroup: {
+                          value: '活動群組',
+                          option: [
+                              {value: 'event1', label: '活動群組一'},
+                              {value: 'event2', label: '活動群組二'}
+                          ]
+                      },
+                      name: '',
+                      eventWebsite: 'eventWebsiteF',
+                      annoEnd: '',
+                  },
+                  collection: {
+                      type: 'collection',
+                  },
+                  topAtteSelect: '',
+                  glb:'./img/demo/MarukoSister.glb',
+                  validationWarningShow: false,
+                  submitBtnStatus: {
+                      disabled: false,
+                      loading: false,
+                  },
+                  saveBtnStatus: {
+                      disabled: false,
+                      loading: false,
+                      label: '儲存變更'
+                  },
+                  errorClass:'validate-error',
+                  category: {
+                      value: {
+                          //- value: 'ticket', 
+                          //- label: '票券',
+                          //- value: 'collection', 
+                          //- label: '收藏品',
+                          value: 'item', 
+                          label: '道具',
+                          option: [
+                              {value: 'coll-1', label: '收藏品類別一'},
+                              {value: 'coll-2', label: '收藏品類別二'},
+                          ]
+                      },
+                      validation: ''
+                  },
+                  subCategory: {
+                      value: {value: 'coll-1', label: '收藏品類別一'},
+                      custom: '',
+                  },
+                  expiration: {
+                      value: 'permanent',
+                      validation: true
+                  },
+                  expirationDateTime: "",
+                  expirationDateRange: {
+                      start:'',
+                      end:''
+                  },
+                  assetType: 'collection',
+                  server: {
+                      value: 'all', 
+                      validation: true
+                  },
+                  serverLimited: [],
+                  serverOption: [
+                      {label: '伺服器1', value: 'server1', disabled: false},
+                      {label: '伺服器2', value: 'server2', disabled: false},
+                      {label: '伺服器3', value: 'server3', disabled: true},
+                      {label: '伺服器4', value: 'server4', disabled: false},
+                      {label: '伺服器5', value: 'server5', disabled: false},
+                      {label: '伺服器6', value: 'server6', disabled: false},
+                      {label: '伺服器7', value: 'server7', disabled: true},
+                      {label: '伺服器8', value: 'server8', disabled: false},
+                      {label: '伺服器9', value: 'server9', disabled: false},
+                  ],
+                  assetImg:{
+                      value: '',
+                      name: '',
+                      alert: '',
+                      validation: true,
+                  },
+                  previewImg:{
+                      value: '',
+                      name: '',
+                      alert: '',
+                      validation: true,
+                  },
+                  previewImgAnyTix:{
+                      value: '',
+                      name: '',
+                      alert: '',
+                      validation: true,
+                  },
+                  asset3D:{
+                      active: false,
+                      value: '',
+                      name: '',
+                      alert: '',
+                      validation: true,
+                      func: [ false, false]
+                  },
+                  assetAR:{
+                      active: false,
+                      value: '',
+                      name: false,
+                      alert: '',
+                      validation: true,
+                      as3d: false,
+                      android: {
+                          name: '',
+                          value: '',
+                          size: '',
+                          alert: '',
+                      },
+                      ios: {
+                          name: '',
+                          value: '',
+                          size: '',
+                          alert: '',
+                      },
+                  },
+                  categoryOption: [
+                      { value: 'item', label: '道具',},
+                      { value: 'ticket', label: '票券',},
+                      { value: 'collection', label: '收藏品',}
+                  ],
+                  itemProperty: [
+                      {attrName:'等級',attrKey:'lv',attrDefault:'1', validation:''},
+                      {attrName:'顏色',attrKey:'color',attrDefault:'黃色', validation:''},
+                  ],
+                  highlight: 0,
+                  serverList: [
+                      {attrName:'',attrKey:'', validation:''},
+                  ],
+                  assetName: {
+                      value: '小丸子帽子',
+                      placeholder: '請填寫資產名稱',
+                      maxlength: 20,
+                  },
+                  assetKey: {
+                      value: 'eqip-as545251',
+                      placeholder: '請填遊戲 Item ID',
+                  },
+                  eventLink: {
+                      value: '',
+                      active: 'eventLinkF',
+                      placeholder: '請填寫活動連結',
+                      maxlength: 1000,
+                      opentype: 'inner'
+                  },
+                  
+                  linkOpenType: [
+                      {label: 'bf! 內開啟', value: 'inner'},
+                      {label: '外部開啟', value: 'out'},
+                      {label: 'Deeplink', value: 'deeplink'},
+                  ],
+                  assetDesc: {
+                      value: '關於小丸子帽子的描述',
+                      placeholder: '請填寫資產說明',
+                      maxlength: 1000,
+                  },
+                  assetRule: [
+                      {
+                          label: '贈與',
+                          name: 'give',
+                          value: false,
+                          show: ['item','ticket','collection'],
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由贈與給beanfun!中的任一好友。',
+                      },
+                      {
+                          label: '交換',
+                          name: 'exchange',
+                          value: false,
+                          show: ['item','ticket','collection'],
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由與beanfun!中的任一好友進行交換。',
+                      },
+                      {
+                          label: '刊登(fun市集)',
+                          name: 'publish',
+                          value: false,
+                          show: ['item','ticket','collection'],
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由將資產刊登到fun市集進行販售。',
+                      },
+                      {
+                          label: '放入遊戲',
+                          name: 'itg',
+                          show: ['item'],
+                          value: false,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者將資產放入遊戲進行運用。',
+                      },
+                      {
+                          label: '自遊戲回背包',
+                          name: 'gti',
+                          show: ['item'],
+                          value: false,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者將遊戲中的資產轉換回背包。',
+                      },
+                      {
+                          label: '串接區塊鏈錢包',
+                          name: 'bc',
+                          show: ['item','ticket','collection'],
+                          value: false,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可讓使用者自由將該資產上練。',
+                      },
+                      {
+                          label: '可轉為實體商品',
+                          name: 'real',
+                          show: ['item','ticket','collection'],
+                          value: false,
+                          tooltip: '打開贈與功能，則該資產在beanfun!生態圈中，可轉換為實體商品。',
+                      },
+      
+                  ],
+                  assetRuleValidation:'',
+                  imgSize: 'big',
+                  cp: {
+                      value: 'OO供應商',
+                      option: [
+                          {value: 'cp1', label: 'OO數位'},
+                          {value: 'cp2', label: 'XX數位'},
+                          {value: 'cp3', label: 'ZZ數位'},
+                      ]
+                  },
+              }
+          },
+          watch: {
+              "category.value": function() {
+                  this.category.value ? this.category.validation = '': ''
+                  this.assetRule.forEach(function(item, index, array){
+                      item.value = false
+                  })
+              },
+              "subCategory.value":function() {
+                  this.subCategory.value ? this.subCategory.validation = '': ''
+              },
+              expirationDateTime: function () {
+                  if(this.expirationDateTime) {
+                      this.expiration.value = 'setTime'
+                      this.expiration.validation = ''
+                  } 
+              },
+              expirationDateRange:{
+                  handler: function () {
+                      if(this.expirationDateRange.start&&this.expirationDateRange.end) {
+                          this.expiration.value = 'setRange'
+                          this.expiration.validation = ''
+                      } 
+                  },
+                  deep: true
+              },
+              serverLimited: function () {
+                  if(this.serverLimited.length > 0) {
+                      this.server.value = 'limited'
+                      this.server.validation = ''
+                  } 
+              },
+              "assetImg.value": function () {
+                  if(this.assetImg.value) {
+                      this.assetImg.validation = ''
+                  } 
+              },
+              "previewImg.value": function () {
+                  if(this.previewImg.value) {
+                      this.previewImg.validation = ''
+                  } 
+              },
+          },
+          computed: {
+              showRule: function (idx) {
+                  //- ")item.show.find(item => item == category.value.value)
+                  return  '2'
+              }
+          },
+          methods: {
+              backpackImgPreview: function(e) {
+                  const file = e.target.files[0];
+                  this.previewImg.name = file.name;
+                  if( file.size / 1024 < 80) {
+                      this.previewImg.value = URL.createObjectURL(file);
+                      this.previewImg.size = (file.size / 1024).toFixed(2);
+                      this.previewImg.alert = ''
+                  } else {
+                      this.previewImg.value = '';
+                      this.previewImg.size = '';
+                      this.previewImg.alert = '檔案尺寸過大'
+                  }
+              },
+              AnyTixPreview: function(e) {
+                  const file = e.target.files[0];
+                  this.previewImgAnytix.name = file.name;
+                  if( file.size / 1024 < 1500) {
+                      this.previewImgAnytix.value = URL.createObjectURL(file);
+                      this.previewImgAnytix.size = (file.size / 1024).toFixed(2);
+                      this.previewImgAnytix.alert = ''
+                  } else {
+                      this.previewImgAnytix.value = '';
+                      this.previewImgAnytix.size = '';
+                      this.previewImgAnytix.alert = '檔案尺寸過大'
+                  }
+              },
+              assetImgPreview: function(e) {
+                  const file = e.target.files[0];
+                  this.assetImg.name = file.name;
+                  if( file.size / 1024 < 1024) {
+                      this.assetImg.value = URL.createObjectURL(file);
+                      this.assetImg.size = (file.size / 1024).toFixed(2);
+                      this.assetImg.alert = ''
+                  } else {
+                      this.assetImg.value = '';
+                      this.assetImg.size = '';
+                      this.assetImg.alert = '檔案尺寸過大'
+                  }
+              },
+              asset3DPreview: function(e) {
+                  const file = e.target.files[0];
+                  this.asset3D.name = file.name;
+                  if( file.size / 1024 < 1024*100) {
+                      //- this.asset3D.value = URL.createObjectURL(file);
+                      this.asset3D.size = (file.size / 1024).toFixed(2);
+                  } else {
+                      this.asset3D.value = '';
+                      this.asset3D.size = '';
+                      this.asset3D.alert = '檔案尺寸過大'
+                  }
+              },
+              arAndroidUpload: function(e) {
+                  const file = e.target.files[0];
+                  this.assetAR.adroid.name = file.name;
+                  if( file.size / 1024 < 1024*100) {
+                      this.assetAR.adroid.size = (file.size / 1024).toFixed(2);
+                  } else {
+                      this.assetAR.adroid.value = '';
+                      this.assetAR.adroid.size = '';
+                      this.assetAR.adroid.alert = '檔案尺寸過大'
+                  }
+              },
+              ariOSUpload: function(e) {
+                  const file = e.target.files[0];
+                  this.assetAR.ios.name = file.name;
+                  if( file.size / 1024 < 1024*100) {
+                      this.assetAR.ios.size = (file.size / 1024).toFixed(2);
+                  } else {
+                      this.assetAR.ios.value = '';
+                      this.assetAR.ios.size = '';
+                      this.assetAR.ios.alert = '檔案尺寸過大'
+                  }
+              },
+              openSentDialog: function(){
+                  $('#previewModal').modal('hide')
+                  $('#assetSent').modal('show')
+              },
+              addField:function(item) {
+                  if(item === 'itemProperty') {
+                      let item = {attrName:'',attrKey:'',attrDefault:''}
+                      this.itemProperty.push(item)
+                  }
+                  if(item === 'serverList') {
+                      let item = {attrName:'',attrKey:''}
+                      this.serverList.push(item)
+                  }
+              },
+              removeField: function(item,idx) {
+                  if(item === 'itemProperty') {
+                      this.itemProperty.splice(idx, 1); 
+                  }
+                  if(item === 'serverList') {
+                      this.serverList.splice(idx, 1); 
+                  }
+              },
+              showSaved: function() {
+                  this.saveBtnStatus.disabled = true
+                  this.saveBtnStatus.loading = true
+                  this.saveBtnStatus.label = '儲存中'
+                  window.setTimeout(function(){
+                      vm.saveBtnStatus.label = '儲存變更'
+                      vm.saveBtnStatus.disabled = false
+                      vm.saveBtnStatus.loading = false
+                  }, 2000);
+              },
+              validationEmpty: function(cb){
+                  let valResult = [];
+                  // 分類
+                  this.subCategory.value ==='placeholder' ? this.category.validation = this.errorClass: ''
+                  // 資產圖片
+                  this.assetImg.value? '':this.assetImg.validation = this.errorClass 
+                  // 背包預覽圖片
+                  this.previewImg.value? '':this.previewImg.validation = this.errorClass
+      
+                  // 效期
+                  if(this.expiration.value === 'setTime'){
+                      this.expirationDateTime?'':this.expiration.validation = this.errorClass 
+                  }else if (this.expiration.value === 'setRange'){
+                      if (!this.expirationDateRange.start || !this.expirationDateRange.start) {
+                          this.expiration.validation = this.errorClass 
+                      }
+                  }
+                  // 伺服器
+                  if(this.server.value!=='all'){
+                      this.serverLimited?'':this.server.validation = this.errorClass 
+                  }
+                  // 屬性
+                  if(this.server.value!=='all'){
+                      this.serverLimited.length?'':this.server.validation = this.errorClass 
+                  }
+                  let rules = this.assetRule.every(function(item, index, array){
+                      return !item.value
+                  });
+                  rules? this.assetRuleValidation = this.errorClass:''
+      
+                  window.setTimeout(function(){
+                      if( typeof cb === 'function' ){
+                          cb();
+                      }
+                  }, 500)
+              },
+              showAlert: function(){
+                  if(document.querySelectorAll('.validate-error').length>0) {
+                      this.validationWarningShow = true
+                      this.submitBtnStatus.loading = false  
+                      this.submitBtnStatus.disabled = false  
+                      // 捲動到錯誤的欄位位置 
+                      let top = document.querySelectorAll('.validate-error')[0].offsetTop
+                      //- console.log(top.scrollY, top.scorllTop, top.offsetTop)
+                      window.scrollTo({
+                          top: top,
+                          left: 0,
+                          behavior: 'smooth'
+                      })
+                  } else {
+                      this.validationWarningShow = false
+                      $('#previewModal').modal('show')
+                  }
+              },
+              saveForm: function (){
+                  vm.submitBtnStatus.disabled = true
+                  vm.submitBtnStatus.loading = true
+                  window.setTimeout(function(){
+                      vm.submitBtnStatus.loading = false
+                      vm.submitBtnStatus.disabled = true  
+                      vm.validationEmpty(vm.showAlert)
+                  }, 1000);
+              }
+          },
+          mounted: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          },
+          updated: function () {
+              this.$nextTick(function () {
+                  jQfn()
+              })
+          }
+      })
+    </script>
+  </body>
+</html>
