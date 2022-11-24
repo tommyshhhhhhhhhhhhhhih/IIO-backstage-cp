@@ -1,0 +1,24 @@
+{
+    "decimal":        "",
+    "emptyTable":     "沒有可顯示的資料",
+    "info":           "顯示從 _START_ 到 _END_ 共 _TOTAL_ 筆資料",
+    "infoEmpty":      "顯示從 0 到 0 共 0 筆資料",
+    "infoFiltered":   "(從 _MAX_ 筆篩選出)",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "顯示 _MENU_ 筆資料",
+    "loadingRecords": "載入中...",
+    "processing":     "執行中...",
+    "search":         "篩選資料: ",
+    "zeroRecords":    "查無符合資料",
+    "paginate": {
+        "first":      "第一筆",
+        "last":       "最後一筆",
+        "next":       "下一筆",
+        "previous":   "上一筆"
+    },
+    "aria": {
+        "sortAscending":  ": activate to sort column ascending",
+        "sortDescending": ": activate to sort column descending"
+    }
+}
